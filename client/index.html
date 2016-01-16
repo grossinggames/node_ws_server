@@ -12,14 +12,14 @@
                 // API initialization succeeded
                 console.log('Успеная регстрация');
 
-                window.onload = function() {
+                //window.onload = function() {
                     // ********************************************** Работа с websocket **********************************************
-                    var socket     = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port);
+                    var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
                     var chat_field = document.getElementById('chat_field');
                     var nick       = "Nick";
 
                     socket.onopen  = function() {
-                      console.log("Соединение установлено.");
+                        console.log("Соединение установлено.");
                     };
 
                     socket.onclose = function(event) {
@@ -229,7 +229,7 @@
                         [54,  147],
                         [32,  262]
                     ];
-                }
+                //}
             }, function() {
                 // API initialization failed
                 console.log('Ошибка инициализации');

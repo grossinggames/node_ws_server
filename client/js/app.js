@@ -1,6 +1,6 @@
 window.onload = function() {
     // ********************************************** Работа с websocket **********************************************
-    var socket     = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port);
+    var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
     var chat_field = document.getElementById('chat_field');
     var nick       = "Nick";
 

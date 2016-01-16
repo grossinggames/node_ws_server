@@ -13,7 +13,7 @@ app.use( express.static('client') );
 // ***************************************** Запуск http сервера *******************************
 var http = require('http');
 var server = http.createServer(app);
-server.listen(8000);
+server.listen(process.env.PORT);
 
 
 // ***************************************** Состояния групп *******************************

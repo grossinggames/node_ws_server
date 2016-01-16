@@ -1,0 +1,245 @@
+.app {
+    width:      1000px;
+    height:     620px;
+    background: #ff0000;
+    margin:     73px 0 0 516px;
+    padding:    0;
+    position:   absolute;
+}
+
+.play_field {
+    width:      704px;
+    height:     620px;
+    background: url(../images/page.png);
+    margin:     0;
+    padding:    0;
+    float:      left;
+}
+
+.table_field {
+    width:      690px;
+    height:     590px;
+    padding:    0;
+    margin:     0;
+    position:   absolute;
+}
+
+.change_bottle {
+    width:                  35px;
+    height:                 35px;
+    background:             url(../images/change_bottle.png) no-repeat;
+    background-position:    0 0;
+    margin:                 80px 0 0 664px;
+    padding:                0;
+    position:               absolute;
+}
+
+.change_table {
+    width:                  35px;
+    height:                 35px;
+    background:             url(../images/change_table.png) no-repeat;
+    background-position:    0 0;
+    margin:                 13px 0 0 664px;
+    padding:                0;
+    position:               absolute;
+}
+
+.buy {
+    width:                  42px;
+    height:                 35px;
+    background:             url(../images/buy.png) no-repeat;
+    background-position:    0 0;
+    margin:                 9px 0 0 14px;
+    padding:                0;
+    position:               absolute;
+}
+
+.achievements {
+    width:                  35px;
+    height:                 35px;
+    background:             url(../images/achievements.png) no-repeat;
+    background-position:    0 0;
+    margin:                 54px 0 0 7px;
+    padding:                0;
+    position:               absolute;
+}
+
+.rating {
+    width:                  34px;
+    height:                 34px;
+    background:             url(../images/rating.png) no-repeat;
+    background-position:    0;
+    margin:                 95px 0 0 9px;
+    padding:                0;
+    position:               absolute;
+}
+
+.sound {
+    width:                  35px;
+    height:                 34px;
+    background:             url(../images/sound.png) no-repeat;
+    background-position:    -35px 0;
+    margin:                 577px 0 0 7px;
+    padding:                0;
+    position:               absolute;
+}
+
+.communion_field {
+    width:          296px;
+    height:         620px;
+    float:          right;
+    background:     #ff0000;
+    margin:         0;
+    padding:        0;
+}
+
+.radio {
+    width:          296px;
+    height:         89px;
+    background:     #cef6f5;
+    border-bottom:  1px solid #dadde3;
+    margin:         0;
+    padding:        0;
+}
+
+.chat {
+    width:          296px;
+    height:         478px;
+    background:     #fdfffa;
+    margin:         0;
+    padding:        0;
+}
+
+.chat_field {
+    list-style-type:    none;
+    width:              296px;
+    height:             468px;
+    margin:             0;
+    padding:            10px 0 0 10px;
+    overflow:           auto;
+}
+
+.send_message {
+    width:          296px;
+    height:         52px;
+    background:     #faa32a;
+    margin:         0;
+    padding:        0;
+}
+
+.send {
+    width:                  52px;
+    height:                 36px;
+    background:             url(../images/send.png);
+    background-position:    0 0;
+    margin:                 8px 8px 0 0;
+    padding:                0;
+    float:                  right;
+}
+
+.text_field {
+    width:          197px;
+    height:         36px;
+    border:         none;
+    border-right:   1px solid #dadde3;
+    margin:         8px 0 0 8px;
+    padding:        0 15px 0 15px;
+    float:          left;
+    border-radius:  10px 0 0 10px;
+    outline:        none;
+}
+
+.player {
+    width:          84px;
+    height:         114px;
+    padding:        0;
+    position:       absolute;
+}
+    /*background:     url(../images/photo.png) no-repeat;*/
+.player0 {
+    margin: 33px 0 0 377px;
+}
+
+.player1 {
+    margin: 53px 0 0 492px;
+}
+
+.player2 {
+    margin: 208px 0 0 577px;
+}
+
+.player3 {
+    margin: 362px 0 0 577px;
+}
+
+.player4 {
+    margin: 448px 0 0 477px;
+}
+
+.player5 {
+    margin: 469px 0 0 358px;
+}
+
+.player6 {
+    margin: 469px 0 0 243px;
+}
+
+.player7 {
+    margin: 448px 0 0 128px;
+}
+
+.player8 {
+    margin: 293px 0 0 43px;
+}
+
+.player9 {
+    margin: 139px 0 0 43px;
+}
+
+.player10 {
+    margin: 54px 0 0 147px;
+}
+
+.player11 {
+    margin: 32px 0 0 262px;
+}
+
+.dj {
+    width:      82px;
+    height:     89px;
+    background: #fdfffa;
+    margin:     0;
+    padding:    0;
+    float:      left;
+}
+
+.dj_face {
+    width:      62px;
+    height:     62px;
+    background: url(../images/dj.png);
+    margin:     14px 0 0 14px;
+    padding:    0;
+    float:      left
+}
+
+.recorder_hub {
+    width:      214px;
+    height:     89px;
+    background: #fdfffa;
+    margin:     0;
+    padding:    0;
+    float:      right;
+}
+
+.recorder {
+    width:      197px;
+    height:     71px;
+    background: url(../images/radio.png);
+    margin:     10px 0 0 0;
+    padding:    0;
+    float:      left;
+}
+
+.button:hover {
+    cursor: pointer;
+}

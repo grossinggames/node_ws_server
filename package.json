@@ -1,0 +1,8 @@
+{
+	"name": "wsServer",
+	"dependencies": {
+	    "ws"     : "latest",
+	    "express": "latest",
+            "http"   : "latest"
+	}
+}

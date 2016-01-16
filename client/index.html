@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/reset.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="shortcut icon" type="image/gif" href="images/faveico.gif">
+        <title>Целуй и Знакомься</title>
+        <script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+        <script type="text/javascript">
+            VK.init(function() {
+                // API initialization succeeded
+                console.log('Успеная регстрация');
+
+                window.onload = function() {
+                    // ********************************************** Работа с websocket **********************************************
+                    var socket     = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port);
+                    var chat_field = document.getElementById('chat_field');
+                    var nick       = "Nick";
+
+                    socket.onopen  = function() {
+                      console.log("Соединение установлено.");
+                    };
+
+                    socket.onclose = function(event) {
+                      if (event.wasClean) {
+                        console.log('Соединение закрыто чисто');
+                      } else {
+                        console.log('Обрыв соединения');
+                      }
+                      console.log('Код: ' + event.code + ' причина: ' + event.reason);
+                    };
+
+                    socket.onmessage = function (event) {
+                        try {
+                            var result = JSON.parse(event.data);
+
+                            if ("slots" in result) {
+                                //positionsDefault[slot][0];
+                                //document.getElementById('player' + result.slot).style.background = 'url(../images/photo.png) no-repeat';
+                                for (key in result.slots) {
+                                    if (result.slots[key]) {
+                                        document.getElementById('player' + key).style.background = 'url(../images/photo.png) no-repeat';
+                                    } else {
+                                        document.getElementById('player' + key).style.background = 'url() no-repeat';
+                                    }
+                                }
+                            } else if ("msg" in result) {
+                                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.msg + '</li>';
+                                chat_field.scrollTop =  chat_field.scrollHeight;
+                            }
+                        } catch(e) {
+                            console.log("Error Message: " + e.message);
+                            return;
+                        }
+                    };
+
+                    socket.onerror = function(error) {
+                      console.log("Ошибка " + error.message);
+                    };
+
+                    // ********************************************** Отпрака сообщений **********************************************
+                    var text_field = document.getElementById('text_field');
+
+                    // Отправить сообщение
+                    function sendMessage() {
+                        socket.send(text_field.value);
+                        text_field.value = "";
+                    }
+
+                    // Отпавить сообщение на Enter
+                    text_field.onkeydown = function (e) {
+                        if (e.keyCode == 13) {
+                            sendMessage();
+                        }
+                    };
+
+                    var send = document.getElementById('send');
+
+                    // Клик отпраки сообщения
+                    send.onclick = function () {
+                        sendMessage();
+                    };
+
+                    // Наведение
+                    send.onmouseover  = function () {
+                        send.style.backgroundPosition = "-52px 0";
+                    };
+
+                    // Снять наведение
+                    send.onmouseleave  = function () {
+                        send.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Смена бутылки **********************************************
+                    var change_bottle = document.getElementById('change_bottle');
+
+                    // Клик
+                    change_bottle.onclick = function () {
+
+                    };
+
+                    // Наведение
+                    change_bottle.onmouseover  = function () {
+                        change_bottle.style.backgroundPosition = "-35px 0";
+                    };
+
+                    // Снять наведение
+                    change_bottle.onmouseleave  = function () {
+                        change_bottle.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Смена стола **********************************************
+                    var change_table = document.getElementById('change_table');
+
+                    // Клик
+                    change_table.onclick = function () {
+
+                    };
+
+                    // Наведение
+                    change_table.onmouseover  = function () {
+                        change_table.style.backgroundPosition = "-35px 0";
+                    };
+
+                    // Снять наведение
+                    change_table.onmouseleave  = function () {
+                        change_table.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Открыть магазин **********************************************
+                    var buy = document.getElementById('buy');
+
+                    // Клик
+                    buy.onclick = function () {
+
+                    };
+
+                    // Наведение
+                    buy.onmouseover  = function () {
+                        buy.style.backgroundPosition = "-42px 0";
+                    };
+
+                    // Снять наведение
+                    buy.onmouseleave  = function () {
+                        buy.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Достижения **********************************************
+                    var achievements = document.getElementById('achievements');
+
+                    // Клик
+                    achievements.onclick = function () {
+
+                    };
+
+                    // Наведение
+                    achievements.onmouseover  = function () {
+                        achievements.style.backgroundPosition = "-35px 0";
+                    };
+
+                    // Снять наведение
+                    achievements.onmouseleave  = function () {
+                        achievements.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Рейтинг **********************************************
+                    var rating = document.getElementById('rating');
+
+                    // Клик
+                    rating.onclick = function () {
+
+                    };
+
+                    // Наведение
+                    rating.onmouseover  = function () {
+                        rating.style.backgroundPosition = "-34px 0";
+                    };
+
+                    // Снять наведение
+                    rating.onmouseleave  = function () {
+                        rating.style.backgroundPosition = "0 0";
+                    };
+
+
+                    // ********************************************** Звук **********************************************
+                    var sound = document.getElementById('sound');
+
+                    // Поменять состояние звука
+                    sound.onclick = function () {
+                        // если отключен 0
+                        // если подключен -105
+                        sound.style.backgroundPosition = "-70px 0";
+
+                    };
+
+                    // Наведение
+                    sound.onmouseover  = function () {
+                        // если отключен -70
+                        // если подключен -105
+                        sound.style.backgroundPosition = "-105px 0";
+                    };
+
+                    // Снять наведение
+                    sound.onmouseleave  = function () {
+                        // если отключен 0
+                        // если подключен -35
+                        sound.style.backgroundPosition = "-35px 0";
+                    };
+
+
+                    // ********************************************** Позиции **********************************************
+                    var positionsDefault = [
+                        [33,  377],
+                        [53,  492],
+                        [208, 577],
+                        [362, 577],
+                        [448, 477],
+                        [469, 358],
+                        [469, 243],
+                        [448, 128],
+                        [293,  43],
+                        [139,  43],
+                        [54,  147],
+                        [32,  262]
+                    ];
+                }
+            }, function() {
+                // API initialization failed
+                console.log('Ошибка инициализации');
+            }, '5.42');
+        </script>
+        <!--<script src="js/app.js"></script>-->
+    </head>
+    <body>
+        <div class="app">
+            <div class="play_field">
+                <div id="table_field" class="table">
+                    <div id="player0" class="player player0"></div>
+                    <div id="player1" class="player player1"></div>
+                    <div id="player2" class="player player2"></div>
+                    <div id="player3" class="player player3"></div>
+                    <div id="player4" class="player player4"></div>
+                    <div id="player5" class="player player5"></div>
+                    <div id="player6" class="player player6"></div>
+                    <div id="player7" class="player player7"></div>
+                    <div id="player8" class="player player8"></div>
+                    <div id="player9" class="player player9"></div>
+                    <div id="player10" class="player player10"></div>
+                    <div id="player11" class="player player11"></div>
+                </div>
+                <div id="change_bottle" class="change_bottle button"></div>
+                <div id="change_table" class="change_table button"></div>
+                <div id="buy" class="buy button"></div>
+                <div id="achievements" class="achievements button"></div>
+                <div id="rating" class="rating button"></div>
+                <div id="sound" class="sound button"></div>
+            </div>
+            <div class="communion_field">
+                <div class="radio">
+                    <div class="dj">
+                        <div class="dj_face"></div>
+                    </div>
+                    <div class="recorder_hub">
+                        <div class="recorder"></div>
+                    </div>
+                </div>
+                <div class="chat">
+                    <ul id="chat_field" class="chat_field"></ul>
+                </div>
+                <div class="send_message">
+                    <input id="text_field" class="text_field" type="text" maxlength="40" placeholder="Написать сообщение">
+                    <div id="send" class="send button"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

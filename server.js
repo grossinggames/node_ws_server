@@ -125,9 +125,11 @@ function updateStateGroup(client) {
     for (var i = 0; i < maxClientOnGroup; i++) {
         message.slots[i] = 0;
 
-        if ( (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) ||
-            (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) ) {
-            message.slots[i] = 1;
+        if (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) {
+            message.slots[i] = {photo: availibleGroups[client.group].slots[i].photo};
+        }
+        if (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) {
+            message.slots[i] = {photo: groups[client.group].slots[i].photo};
         }
     }
     sendMessageGroup(client.group, message);
@@ -143,7 +145,13 @@ socket.on('connection', function(client) {
     //traceState();
 
     client.on('message', function(message) {
-        sendMessageGroup(client.group, {msg: message});
+        message = JSON.parse(message);
+        if ("photo" in message) {
+            client.photo = message.photo;
+            updateStateGroup(client);
+        } else {
+            sendMessageGroup(client.group, {msg: message.msg});
+        }
     });
 
     client.on('close', function() {

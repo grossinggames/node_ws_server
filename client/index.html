@@ -194,30 +194,46 @@
 
 
                 // ********************************************** Звук **********************************************
-                var sound = document.getElementById('sound');
 
+                // Кнопка
+                var sound = document.getElementById('sound');
+                var soundOn = true;
+                
                 // Поменять состояние звука
                 sound.onclick = function () {
-                    // если отключен 0
-                    // если подключен -105
-                    sound.style.backgroundPosition = "-70px 0";
-
+                    soundOn = !soundOn;
+                    
+                    if (soundOn) {
+                        sound.style.backgroundPosition = "-105px 0";
+                    } else {
+                        sound.style.backgroundPosition = "-70px 0";
+                    }
                 };
 
                 // Наведение
                 sound.onmouseover  = function () {
-                    // если отключен -70
-                    // если подключен -105
-                    sound.style.backgroundPosition = "-105px 0";
+                    if (soundOn) {
+                        sound.style.backgroundPosition = "-105px 0";
+                    } else {
+                        sound.style.backgroundPosition = "-70px 0";
+                    }
                 };
 
                 // Снять наведение
                 sound.onmouseleave  = function () {
-                    // если отключен 0
-                    // если подключен -35
-                    sound.style.backgroundPosition = "-35px 0";
+                    if (soundOn) {
+                        sound.style.backgroundPosition = "-35px 0";
+                    } else {
+                        sound.style.backgroundPosition = "0 0";
+                    }
                 };
 
+                //Функция воспроизведения звука
+                function playSound() {
+                    if (soundOn) {
+                        // Функция воспроизведения звука
+                    }
+                }
 
                 // ********************************************** Позиции **********************************************
                 var positionsDefault = [

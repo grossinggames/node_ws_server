@@ -43,15 +43,17 @@ function addClient(client) {
 function getAvailableGroup(client) {
     //console.log('getAvailableGroup');
     for (key in availibleGroups) {
-        for (var i = 0; i < maxClientOnGroup; i++) {
-            if (!availibleGroups[key].slots[i]) {
-                availibleGroups[key].slots[i] = client;
-                client.slot = i;
-                if (i == maxClientOnGroup - 1) {
-                    groups[key] = availibleGroups[key];
-                    delete availibleGroups[key];
+        if (key != client.group) {
+            for (var i = 0; i < maxClientOnGroup; i++) {
+                if (!availibleGroups[key].slots[i]) {
+                    availibleGroups[key].slots[i] = client;
+                    client.slot = i;
+                    if (i == maxClientOnGroup - 1) {
+                        groups[key] = availibleGroups[key];
+                        delete availibleGroups[key];
+                    }
+                    return key;
                 }
-                return key;
             }
         }
     }
@@ -149,8 +151,17 @@ socket.on('connection', function(client) {
         if ("photo" in message) {
             client.photo = message.photo;
             updateStateGroup(client);
-        } else {
+        }
+        if ("msg" in message) {        
             sendMessageGroup(client.group, {msg: message.msg});
+        }
+        if ("table" in message) {
+            if (message.table == "change") {
+                outClient(client);
+                updateStateGroup(client);
+                client.group = addClient(client);
+                updateStateGroup(client);
+            }
         }
     });
 

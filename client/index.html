@@ -20,13 +20,9 @@
                 socket.onopen  = function() {
                     console.log("Websocket соединение установлено.");
                     
-
                     VK.api("users.get", {fields: "photo_100"}, function(data) { 
-                        console.log('************** photoId *****************');
-                        photoId = data.response[0].photo_100;
-
-                        if (photoId) {
-                            socket.send( JSON.stringify({photo: photoId}) );
+                        if (data && data.response && data.response[0] && data.response[0].photo_100) {
+                            socket.send( JSON.stringify({photo: data.response[0].photo_100}) );
                         }
                     });
                     
@@ -48,7 +44,6 @@
                         if ("slots" in result) {
                             for (key in result.slots) {
                                 if (result.slots[key].photo) {
-                                    console.log('photo = ' + result.slots[key].photo);
                                     document.getElementById('player' + key).style.background = 'url(' + result.slots[key].photo + ') no-repeat';
                                 } else {
                                     document.getElementById('player' + key).style.background = 'url() no-repeat';
@@ -127,7 +122,7 @@
 
                 // Клик
                 change_table.onclick = function () {
-
+                    socket.send( JSON.stringify({table: "change"}) );
                 };
 
                 // Наведение

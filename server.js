@@ -15,7 +15,6 @@ var http = require('http');
 var server = http.createServer(app);
 server.listen(process.env.PORT);
 
-
 // ***************************************** Состояния групп *******************************
 // Все созданные группы с количеством участников в каждой из них
 var groups = [];

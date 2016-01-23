@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
 }
-
 .app {
     width:      1000px;
     height:     620px;
@@ -11,7 +10,6 @@
     padding:    0;
     position:   absolute;
 }
-
 .play_field {
     width:      704px;
     height:     620px;
@@ -20,7 +18,6 @@
     padding:    0;
     float:      left;
 }
-
 .table_field {
     width:      690px;
     height:     590px;
@@ -28,7 +25,6 @@
     margin:     0;
     position:   absolute;
 }
-
 .change_bottle {
     width:                  35px;
     height:                 35px;
@@ -38,7 +34,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .change_table {
     width:                  35px;
     height:                 35px;
@@ -48,7 +43,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .buy {
     width:                  42px;
     height:                 35px;
@@ -58,7 +52,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .achievements {
     width:                  35px;
     height:                 35px;
@@ -68,7 +61,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .rating {
     width:                  34px;
     height:                 34px;
@@ -78,7 +70,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .sound {
     width:                  35px;
     height:                 34px;
@@ -88,7 +79,6 @@
     padding:                0;
     position:               absolute;
 }
-
 .communion_field {
     width:          296px;
     height:         620px;
@@ -97,7 +87,6 @@
     margin:         0;
     padding:        0;
 }
-
 .radio {
     width:          296px;
     height:         89px;
@@ -106,7 +95,6 @@
     margin:         0;
     padding:        0;
 }
-
 .chat {
     width:          296px;
     height:         478px;
@@ -114,7 +102,6 @@
     margin:         0;
     padding:        0;
 }
-
 .chat_field {
     list-style-type:    none;
     width:              296px;
@@ -123,7 +110,6 @@
     padding:            10px 0 0 10px;
     overflow:           auto;
 }
-
 .send_message {
     width:          296px;
     height:         52px;
@@ -131,7 +117,6 @@
     margin:         0;
     padding:        0;
 }
-
 .send {
     width:                  52px;
     height:                 36px;
@@ -141,7 +126,6 @@
     padding:                0;
     float:                  right;
 }
-
 .text_field {
     width:          197px;
     height:         36px;
@@ -153,7 +137,6 @@
     border-radius:  10px 0 0 10px;
     outline:        none;
 }
-
 .player {
     width:          84px;
     height:         114px;
@@ -164,51 +147,39 @@
 .player0 {
     margin: 33px 0 0 377px;
 }
-
 .player1 {
     margin: 53px 0 0 492px;
 }
-
 .player2 {
     margin: 208px 0 0 577px;
 }
-
 .player3 {
     margin: 362px 0 0 577px;
 }
-
 .player4 {
     margin: 448px 0 0 477px;
 }
-
 .player5 {
     margin: 469px 0 0 358px;
 }
-
 .player6 {
     margin: 469px 0 0 243px;
 }
-
 .player7 {
     margin: 448px 0 0 128px;
 }
-
 .player8 {
     margin: 293px 0 0 43px;
 }
-
 .player9 {
     margin: 139px 0 0 43px;
 }
-
 .player10 {
     margin: 54px 0 0 147px;
 }
-
 .player11 {
     margin: 32px 0 0 262px;
 }
-
 .dj {
     width:      82px;
     height:     89px;
@@ -217,7 +188,6 @@
     padding:    0;
     float:      left;
 }
-
 .dj_face {
     width:      62px;
     height:     62px;
@@ -226,7 +196,6 @@
     padding:    0;
     float:      left
 }
-
 .recorder_hub {
     width:      214px;
     height:     89px;
@@ -235,7 +204,6 @@
     padding:    0;
     float:      right;
 }
-
 .recorder {
     width:      197px;
     height:     71px;
@@ -244,7 +212,88 @@
     padding:    0;
     float:      left;
 }
-
 .button:hover {
     cursor: pointer;
+}
+.overlay {
+    background-color:   #000;
+    width:              1000px;
+    height:             620px;
+    opacity:            0.5;
+    z-index:            100;
+    position:           absolute;
+}
+.window_rating {
+    margin:             10px 0 0 210px;
+    padding:            0;
+    width:              580px;
+    height:             600px;
+    z-index:            101;
+    position:           absolute;
+    border-radius:      10px;
+    background:         rgba(0, 0, 0, 0.1);
+}
+.window_rating_hub {
+    background:         #f5f5dc;
+    margin:             5px 0 0 5px;
+    padding:            0;
+    width:              570px;
+    height:             590px;
+    border-radius:      10px;
+    position:           absolute;
+    background:         linear-gradient(to top, #d41135, #ffd900);
+}
+.window_rating_border {
+    background:         rgba(0, 0, 0, 0.1);
+    width:              554px;
+    height:             544px;
+    margin:             40px 0 0 8px;
+    padding:            0;
+    border-radius:      0 3px 3px 3px;
+    position:           absolute;
+    z-index:            1;
+}
+.window_rating_field {
+    background:         #f3fae6;
+    width:              550px;
+    height:             540px;
+    margin:             2px 0 0 2px;
+    padding:            0;
+    border-radius:      0 3px 3px 3px;
+}
+.window_rating_inset {
+    background:         rgba(0, 0, 0, 0.1);
+    width:              74px;
+    height:             35px;
+    margin:             5px 0 0 8px;
+    padding:            0;
+    border-radius:      3px 3px 0 0;
+    position:           absolute;
+    z-index:            2;
+}
+.window_rating_ico {
+    background:         #f3fae6;
+    width:              70px;
+    height:             35px;
+    margin:             2px 0 0 2px;
+    padding:            0;
+    border-radius:      3px 3px 0 0;
+}
+.window_rating_inset2 {
+    background:         rgba(0, 0, 0, 0.1);
+    width:              74px;
+    height:             30px;
+    margin:             10px 0 0 70px;
+    padding:            0;
+    border-radius:      3px 3px 0 0;
+    position:           absolute;
+    z-index:            0;
+}
+.window_rating_ico2 {
+    background:         #f3fae6;
+    width:              70px;
+    height:             30px;
+    margin:             2px 0 0 2px;
+    padding:            0;
+    border-radius:      3px 3px 0 0;
 }

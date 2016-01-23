@@ -198,8 +198,6 @@ VK.init(function() {
     // Поменять состояние звука
     sound.onclick = function () {
         soundOn = !soundOn;
-        socket.send( JSON.stringify({msg: text_field.value}) );
-        socket.send( JSON.stringify({msg: "123"}) );
         if (soundOn) {
             sound.style.backgroundPosition = "-105px 0";
         } else {

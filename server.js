@@ -40,7 +40,10 @@ function addClient(client) {
 
 // Метод получения группы из списка доступных групп
 function getAvailableGroup(client) {
-    //console.log('getAvailableGroup');
+    // console.log('getAvailableGroup');
+    // Отдавать свою же комнату в случае если нет других, а не создавать новую
+    
+    //использовать key с объявлением var
     for (key in availibleGroups) {
         if (key != client.group) {
             for (var i = 0; i < maxClientOnGroup; i++) {

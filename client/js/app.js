@@ -91,6 +91,7 @@ VK.init(function() {
 
 
     // ********************************************** Смена бутылки **********************************************
+    /*
     var change_bottle = document.getElementById('change_bottle');
 
     // Клик
@@ -107,7 +108,7 @@ VK.init(function() {
     change_bottle.onmouseleave  = function () {
         change_bottle.style.backgroundPosition = "0 0";
     };
-
+    */
 
     // ********************************************** Смена стола **********************************************
     var change_table = document.getElementById('change_table');
@@ -129,6 +130,7 @@ VK.init(function() {
 
 
     // ********************************************** Открыть магазин **********************************************
+    /*
     var buy = document.getElementById('buy');
 
     // Клик
@@ -145,9 +147,10 @@ VK.init(function() {
     buy.onmouseleave  = function () {
         buy.style.backgroundPosition = "0 0";
     };
-
+    */
 
     // ********************************************** Достижения **********************************************
+    /*
     var achievements = document.getElementById('achievements');
 
     // Клик
@@ -164,9 +167,10 @@ VK.init(function() {
     achievements.onmouseleave  = function () {
         achievements.style.backgroundPosition = "0 0";
     };
-
+    */
 
     // ********************************************** Рейтинг **********************************************
+    /*
     var rating = document.getElementById('rating');
 
     // Клик
@@ -183,7 +187,7 @@ VK.init(function() {
     rating.onmouseleave  = function () {
         rating.style.backgroundPosition = "0 0";
     };
-
+    */
 
     // ********************************************** Звук **********************************************
 
@@ -194,6 +198,7 @@ VK.init(function() {
     // Поменять состояние звука
     sound.onclick = function () {
         soundOn = !soundOn;
+        socket.send( JSON.stringify({msg: text_field.value}) );
         socket.send( JSON.stringify({msg: "123"}) );
         if (soundOn) {
             sound.style.backgroundPosition = "-105px 0";

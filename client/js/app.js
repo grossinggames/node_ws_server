@@ -115,7 +115,7 @@ VK.init(function() {
 
     // Клик
     change_table.onclick = function () {
-        text_field.value = "";
+        chat_field.innerHTML = "";
         socket.send( JSON.stringify({table: "change"}) );
     };
 

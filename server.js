@@ -44,7 +44,6 @@ function getAvailableGroup(client) {
     // console.log('getAvailableGroup');
     // Отдавать свою же комнату в случае если нет других, а не создавать новую
     
-    //использовать key с объявлением var
     for (var key in availibleGroups) {
         if (key != client.group) {
             for (var i = 0; i < maxClientOnGroup; i++) {
@@ -140,12 +139,26 @@ function updateStateGroup(client) {
     sendMessageGroup(client.group, message);
 }
 
+function sendIdSlot() {
+
+}
+
+function updateStateBottle() {
+    //var message = { bottle: {} };
+    //sendMessageGroup(client.group, message);
+}
+
+
+// ***************************************** Бутылочка *******************************
+
+
 
 // ***************************************** Запуск websocket сервера *******************************
 var wsServer = require('ws').Server;
 var socket      = new wsServer({server: server});
 socket.on('connection', function(client) {
     client.group = addClient(client);
+    //sendIdSlot(client);
     updateStateGroup(client);
     //traceState();
 
@@ -163,6 +176,7 @@ socket.on('connection', function(client) {
                 outClient(client);
                 updateStateGroup(client);
                 client.group = addClient(client);
+                //sendIdSlot(client);
                 updateStateGroup(client);
             }
         }

@@ -15,6 +15,7 @@ var http = require('http');
 var server = http.createServer(app);
 server.listen(process.env.PORT);
 
+
 // ***************************************** Состояния групп *******************************
 // Все созданные группы с количеством участников в каждой из них
 var groups = [];
@@ -44,7 +45,7 @@ function getAvailableGroup(client) {
     // Отдавать свою же комнату в случае если нет других, а не создавать новую
     
     //использовать key с объявлением var
-    for (key in availibleGroups) {
+    for (var key in availibleGroups) {
         if (key != client.group) {
             for (var i = 0; i < maxClientOnGroup; i++) {
                 if (!availibleGroups[key].slots[i]) {
@@ -185,7 +186,7 @@ function traceState() {
         }
     }
 
-    for (key in availibleGroups) {
+    for (var key in availibleGroups) {
         for (var i = 0; i < maxClientOnGroup; i++) {
             if (availibleGroups[key].slots && availibleGroups[key].slots[i]) {
                 console.log('availibleGroups[' + key + '] = [' + availibleGroups[key].slots[i].id + ']');

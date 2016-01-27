@@ -114,6 +114,8 @@ function sendMessageGroup(id, message) {
     
     if (availibleGroups[id] || groups[id]) {
         for (var i = 0; i < maxClientOnGroup; i++) {
+            message.slot = i;
+            
             if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {
                 availibleGroups[id].slots[i].send(message);
             }

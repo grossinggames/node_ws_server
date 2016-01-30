@@ -218,19 +218,15 @@ socket.on('connection', function(client) {
         if ("bottle" in message) {
             if (message.bottle) {
                 var slot = getNextSlot(client.group);
-                if (availibleGroups[client.group]) {
-                    if (availibleGroups[client.group].current) {
-                        availibleGroups[client.group].current = slot;
-                        sendMessageGroup(client.group, {bottle: slot});
-                        return;
-                    }
+                if (availibleGroups[client.group] && availibleGroups[client.group].current) {
+                    availibleGroups[client.group].current = slot;
+                    sendMessageGroup(client.group, {bottle: slot});
+                    return;
                 }
-                if (groups[id]) {
-                    if (groups[id].slots && groups[id].slots[slot]) {
-                        groups[client.group].current = slot;
-                        sendMessageGroup(client.group, {bottle: slot});
-                        return;
-                    }
+                if (groups[client.group] && groups[client.group].current) {
+                    groups[client.group].current = slot;
+                    sendMessageGroup(client.group, {bottle: slot});
+                    return;
                 }
             }
         }

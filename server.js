@@ -209,9 +209,9 @@ function getNextSlot(group) {
 
     var slot = false;
 
-    if (groups[group]) {
+    if (groups[group].current) {
         slot = getSlot(group, groups);
-    } else if (availibleGroups[group]) {
+    } else if (availibleGroups[group].current) {
         slot = getSlot(group, availibleGroups);
     }
     return slot;

@@ -110,12 +110,25 @@ function outClient(client) {
 
 // ***************************************** Методы отправки сообщений в группы *******************************
 function sendMessageGroup(id, message) {
-    message = JSON.stringify(message);
+    var slot = getNextSlot(id);
     
     if (availibleGroups[id] || groups[id]) {
+        if (availibleGroups[id] && availibleGroups[id].current) {
+            availibleGroups[id].current = slot;
+        }
+        if (groups[id] && groups[id].current) {
+            groups[id].current = slot;
+        }
+
         for (var i = 0; i < maxClientOnGroup; i++) {
+            // Отсылаем каждому его slot в группе
             message.slot = i;
             
+            // Удалить после тестов
+            message.msg = slot;
+
+            message = JSON.stringify(message);
+
             if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {
                 availibleGroups[id].slots[i].send(message);
             }
@@ -152,7 +165,57 @@ function updateStateBottle() {
 
 
 // ***************************************** Бутылочка *******************************
+// Все созданные группы с количеством участников в каждой из них
+/*groups = [
+    {
+        slots: {
+            "0": "ws",
+            "1": "ws"
+        },
+        current: 0,
+        kissing: [0,11]
+    }
+];
 
+availibleGroups = {
+    "0": {
+        slots: {
+            "0": "ws",
+            "1": "ws"
+        },
+        current: 0,
+        kissing: [0,1]
+    }
+};
+
+*/
+
+// Получить следующего кто крутит бутылочку
+function getNextSlot(group) {
+
+    function getSlot(group, arr) {
+        for (var i = ++arr[group].current; i < maxClientOnGroup; i++) {
+            if (arr[group].slots[i]) {
+                return i;
+            }
+        }
+        for (var i = 0, count = arr[group].current; i < count; i++) {
+            if (arr[group].slots[i]) {
+                return i;
+            }
+        }
+        return false;
+    }
+
+    var slot = false;
+
+    if (groups[group]) {
+        slot = getSlot(group, groups);
+    } else if (availibleGroups[group]) {
+        slot = getSlot(group, availibleGroups);
+    }
+    return slot;
+}
 
 
 // ***************************************** Запуск websocket сервера *******************************

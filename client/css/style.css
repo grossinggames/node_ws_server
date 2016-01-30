@@ -79,14 +79,15 @@
     position:               absolute;
 }
 .bottle {
-    width:                  60px;
-    height:                 198px;
-    background:             url(../images/bottle.png) no-repeat;
-    margin:                 208px 0 0 322px;
-    padding:                0;
-    position:               absolute;
-    transform:              rotate(0deg);
-    transition:             3s;
+    width:                      60px;
+    height:                     198px;
+    background:                 url(../images/bottle.png) no-repeat;
+    margin:                     208px 0 0 322px;
+    padding:                    0;
+    position:                   absolute;
+    transform:                  rotate(0deg);
+    transition:                 3s;
+    transition-timing-function: ease-in-out;
 }
 .communion_field {
     width:          296px;

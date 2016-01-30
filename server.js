@@ -196,24 +196,32 @@ function getNextSlot(group) {
     function getSlot(group, arr) {
         for (var i = ++arr[group].current; i < maxClientOnGroup; i++) {
             if (arr[group].slots[i]) {
+                console.log('getSlot (1) return i = ', i);
                 return i;
             }
         }
         for (var i = 0, count = arr[group].current; i < count; i++) {
             if (arr[group].slots[i]) {
+                console.log('getSlot (2) return i = ', i);
                 return i;
             }
         }
+
+        console.log('getSlot return false');
         return false;
     }
 
     var slot = false;
 
     if (groups[group].current) {
+        console.log('groups[group].current = ', groups[group].current);
         slot = getSlot(group, groups);
     } else if (availibleGroups[group].current) {
+        console.log('availibleGroups[group].current = ', availibleGroups[group].current);
         slot = getSlot(group, availibleGroups);
     }
+
+    console.log('getNextSlot return slot = ', slot);
     return slot;
 }
 

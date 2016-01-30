@@ -85,6 +85,8 @@
     margin:                 208px 0 0 322px;
     padding:                0;
     position:               absolute;
+    transform:              rotate(0deg);
+    transition:             3s;
 }
 .communion_field {
     width:          296px;

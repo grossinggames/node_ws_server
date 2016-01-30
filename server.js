@@ -213,10 +213,10 @@ function getNextSlot(group) {
 
     var slot = false;
 
-    if (groups[group].current) {
+    if (groups[group] && groups[group].current) {
         console.log('groups[group].current = ', groups[group].current);
         slot = getSlot(group, groups);
-    } else if (availibleGroups[group].current) {
+    } else if (availibleGroups[group] && availibleGroups[group].current) {
         console.log('availibleGroups[group].current = ', availibleGroups[group].current);
         slot = getSlot(group, availibleGroups);
     }

@@ -219,11 +219,13 @@ function getNextSlot(group) {
     var slot = false;
 
     if (groups[group]) {
+        console.log('groups[group]');
         if ("current" in groups[group]) {
             console.log('groups[group].current = ', groups[group].current);
             slot = getSlot(group, groups);
         }
     } else if (availibleGroups[group]) {
+        console.log('availibleGroups[group]');
         if ("current" in availibleGroups[group]) {
             console.log('availibleGroups[group].current = ', availibleGroups[group].current);
             slot = getSlot(group, availibleGroups);

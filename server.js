@@ -107,15 +107,8 @@ function outClient(client) {
 // Отправить сообщения всей группе
 function sendMessageGroup(id, message) {
     if (availibleGroups[id] || groups[id]) {
-        if (availibleGroups[id] && availibleGroups[id].current) {
-            availibleGroups[id].current = slot;
-        }
-        if (groups[id] && groups[id].current) {
-            groups[id].current = slot;
-        }
-
         for (var i = 0; i < maxClientOnGroup; i++) {
-            // Отсылаем каждому его slot в группе
+            // Отсылаем в сообщении каждому пользователю его slot в группе
             message.slot = i;
 
             if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {

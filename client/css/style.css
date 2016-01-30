@@ -87,7 +87,7 @@
     position:                   absolute;
     transform:                  rotate(0deg);
     transition:                 3s;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: ease;
 }
 .communion_field {
     width:          296px;

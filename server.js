@@ -1,4 +1,5 @@
 // ***************************************** Обработка неотловленных ошибок *******************************
+// Отлавливаем необработанные исключения
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
 });
@@ -75,10 +76,9 @@ function addAvailableGroup(id, client) {
     client.slot = 0;
 }
 
-// Выход клиента
+// Выход клиента из группы
 function outClient(client) {
     //console.log('outClient');
-
     var id   = client.group
     var slot = client.slot;
     if (availibleGroups[id]) {
@@ -103,12 +103,8 @@ function outClient(client) {
 }
 
 
-// ***************************************** Методы смены группы *******************************
-//outClient(client.group);
-//client.group = addClient();
-
-
 // ***************************************** Методы отправки сообщений в группы *******************************
+// Отправить сообщения всей группе
 function sendMessageGroup(id, message) {
     if (availibleGroups[id] || groups[id]) {
         if (availibleGroups[id] && availibleGroups[id].current) {
@@ -132,7 +128,8 @@ function sendMessageGroup(id, message) {
     }
 }
 
-function updateStateGroup(client) {
+// Отправить текущее состояние в группе всей группе
+function sendStateGroup(client) {
     var message = { slots: {} };
     for (var i = 0; i < maxClientOnGroup; i++) {
         message.slots[i] = 0;
@@ -147,42 +144,8 @@ function updateStateGroup(client) {
     sendMessageGroup(client.group, message);
 }
 
-function sendIdSlot() {
-
-}
-
-function updateStateBottle() {
-    //var message = { bottle: {} };
-    //sendMessageGroup(client.group, message);
-}
-
 
 // ***************************************** Бутылочка *******************************
-// Все созданные группы с количеством участников в каждой из них
-/*groups = [
-    {
-        slots: {
-            "0": "ws",
-            "1": "ws"
-        },
-        current: 0,
-        kissing: [0,11]
-    }
-];
-
-availibleGroups = {
-    "0": {
-        slots: {
-            "0": "ws",
-            "1": "ws"
-        },
-        current: 0,
-        kissing: [0,1]
-    }
-};
-
-*/
-
 // Получить следующего кто крутит бутылочку
 function getNextSlot(group) {
 
@@ -218,41 +181,56 @@ function getNextSlot(group) {
 // ***************************************** Запуск websocket сервера *******************************
 var wsServer = require('ws').Server;
 var socket      = new wsServer({server: server});
+
+// Открыто новое соединение
 socket.on('connection', function(client) {
     client.group = addClient(client);
-    //sendIdSlot(client);
-    updateStateGroup(client);
+    sendStateGroup(client);
     //traceState();
 
+    // Сообщения от пользователя
     client.on('message', function(message) {
         message = JSON.parse(message);
+
+        // Пользователь дал ссылку на свою аву
         if ("photo" in message) {
             client.photo = message.photo;
-            updateStateGroup(client);
+            sendStateGroup(client);
         }
+
+        // Пользователь отправил сообщение
         if ("msg" in message) {        
             sendMessageGroup(client.group, {msg: message.msg});
         }
+
+        // Пользователь хочет сменить стол
         if ("table" in message) {
             if (message.table == "change") {
                 outClient(client);
-                updateStateGroup(client);
+                sendStateGroup(client);
                 client.group = addClient(client);
-                //sendIdSlot(client);
-                updateStateGroup(client);
+                sendStateGroup(client);
+            }
+        }
+
+        // Пользователь кликнул по бутылке
+        if ("bottle" in message) {
+            if (message.bottle) {
+
             }
         }
     });
 
     client.on('close', function() {
         outClient(client);
-        updateStateGroup(client);
+        sendStateGroup(client);
         //traceState();
     });
 });
 
 
 // ***************************************** Показать состояние в группах *******************************
+// Логгирование состояний
 function traceState() {
     for (var i = 0; i < groups.length; i++) {
         for (var j = 0; j < maxClientOnGroup; j++) {

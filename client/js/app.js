@@ -231,6 +231,28 @@ VK.init(function() {
         }
     }
 
+
+    // ********************************************** Бутылка **********************************************
+
+    // Бутылка
+    var bottle = document.getElementById('bottle');
+
+    // Поменять состояние звука
+    bottle.onclick = function () {
+        socket.send( JSON.stringify({bottle: '1'}) );
+    };
+
+    // Наведение
+    bottle.onmouseover  = function () {
+
+    };
+
+    // Снять наведение
+    bottle.onmouseleave  = function () {
+
+    };
+
+
     // ********************************************** Позиции **********************************************
     var positionsDefault = [
         [33,  377],

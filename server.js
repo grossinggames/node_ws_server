@@ -134,13 +134,11 @@ function sendMessageGroup(id, message) {
                 message.msg = slot;
             }
 
-            message = JSON.stringify(message);
-
             if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {
-                availibleGroups[id].slots[i].send(message);
+                availibleGroups[id].slots[i].send( JSON.stringify(message) );
             }
             if (groups[id] && groups[id].slots && groups[id].slots[i]) {
-                groups[id].slots[i].send(message);
+                groups[id].slots[i].send( JSON.stringify(message) );
             }
         }
     }

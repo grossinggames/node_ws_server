@@ -1,3 +1,4 @@
+// Инициализация вк
 VK.init(function() {
     // API initialization succeeded
     console.log('Успеная регстрация вконтакте');
@@ -9,6 +10,7 @@ VK.init(function() {
     var chat_field = document.getElementById('chat_field');
     var nick       = "Nick";
 
+    // Соединение открыто
     socket.onopen  = function() {
         console.log("Websocket соединение установлено.");
 
@@ -20,6 +22,7 @@ VK.init(function() {
 
     };
 
+    // Соединение закрыто
     socket.onclose = function(event) {
       if (event.wasClean) {
         console.log('Соединение закрыто чисто');
@@ -29,10 +32,12 @@ VK.init(function() {
       console.log('Код: ' + event.code + ' причина: ' + event.reason);
     };
 
+    // Пришло сообщение
     socket.onmessage = function (event) {
         try {
             var result = JSON.parse(event.data);
 
+            // Обновления в слотах
             if ("slots" in result) {
                 for (key in result.slots) {
                     if (result.slots[key].photo) {
@@ -41,8 +46,17 @@ VK.init(function() {
                         document.getElementById('player' + key).style.background = 'url() no-repeat';
                     }
                 }
-            } else if ("msg" in result) {
+            }
+
+            // Новое сообщние
+            if ("msg" in result) {
                 chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.msg + '</li>';
+                chat_field.scrollTop =  chat_field.scrollHeight;
+            }
+
+            // Бутылку крутит следующий слот
+            if ("bottle" in result) {
+                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.bottle + '</li>';
                 chat_field.scrollTop =  chat_field.scrollHeight;
             }
         } catch(e) {
@@ -51,6 +65,7 @@ VK.init(function() {
         }
     };
 
+    // Ошибка с соединением
     socket.onerror = function(error) {
       console.log("Ошибка " + error.message);
     };
@@ -191,7 +206,6 @@ VK.init(function() {
     */
 
     // ********************************************** Звук **********************************************
-
     // Кнопка
     var sound = document.getElementById('sound');
     var soundOn = true;
@@ -233,7 +247,6 @@ VK.init(function() {
 
 
     // ********************************************** Бутылка **********************************************
-
     // Бутылка
     var bottle = document.getElementById('bottle');
 

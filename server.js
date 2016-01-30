@@ -128,7 +128,7 @@ function sendMessageGroup(id, message) {
     }
 }
 
-// Отправить текущее состояние в группе всей группе
+// Отправить текущее состояние в группе по слотам всей группе
 function sendStateGroup(client) {
     var message = { slots: {} };
     for (var i = 0; i < maxClientOnGroup; i++) {
@@ -149,6 +149,7 @@ function sendStateGroup(client) {
 // Получить следующего кто крутит бутылочку
 function getNextSlot(group) {
 
+    // Получить новый слот
     function getSlot(group, arr) {
         for (var i = ++arr[group].current; i < maxClientOnGroup; i++) {
             if (arr[group].slots[i]) {
@@ -216,7 +217,21 @@ socket.on('connection', function(client) {
         // Пользователь кликнул по бутылке
         if ("bottle" in message) {
             if (message.bottle) {
-
+                var slot = getNextSlot(client.group);
+                if (availibleGroups[client.group]) {
+                    if (availibleGroups[client.group].current) {
+                        availibleGroups[client.group].current = slot;
+                        sendMessageGroup(client.group, {bottle: slot});
+                        return;
+                    }
+                }
+                if (groups[id]) {
+                    if (groups[id].slots && groups[id].slots[slot]) {
+                        groups[client.group].current = slot;
+                        sendMessageGroup(client.group, {bottle: slot});
+                        return;
+                    }
+                }
             }
         }
     });

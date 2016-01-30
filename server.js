@@ -110,13 +110,6 @@ function outClient(client) {
 
 // ***************************************** Методы отправки сообщений в группы *******************************
 function sendMessageGroup(id, message) {
-
-    // Удалить после тестов
-    var slot = null;
-    if ("msg" in message) {
-        slot = getNextSlot(id);
-    }
-
     if (availibleGroups[id] || groups[id]) {
         if (availibleGroups[id] && availibleGroups[id].current) {
             availibleGroups[id].current = slot;
@@ -128,11 +121,6 @@ function sendMessageGroup(id, message) {
         for (var i = 0; i < maxClientOnGroup; i++) {
             // Отсылаем каждому его slot в группе
             message.slot = i;
-            
-            // Удалить после тестов
-            if ("msg" in message) {
-                message.msg = slot;
-            }
 
             if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {
                 availibleGroups[id].slots[i].send( JSON.stringify(message) );

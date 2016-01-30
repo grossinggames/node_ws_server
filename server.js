@@ -110,12 +110,13 @@ function outClient(client) {
 
 // ***************************************** Методы отправки сообщений в группы *******************************
 function sendMessageGroup(id, message) {
-    var slot = 'null';
 
-    if (message.msg) {
+    // Удалить после тестов
+    var slot = null;
+    if ("msg" in message) {
         slot = getNextSlot(id);
     }
-    
+
     if (availibleGroups[id] || groups[id]) {
         if (availibleGroups[id] && availibleGroups[id].current) {
             availibleGroups[id].current = slot;
@@ -129,7 +130,7 @@ function sendMessageGroup(id, message) {
             message.slot = i;
             
             // Удалить после тестов
-            if (message.msg) {
+            if ("msg" in message) {
                 message.msg = slot;
             }
 
@@ -219,12 +220,16 @@ function getNextSlot(group) {
 
     var slot = false;
 
-    if (groups[group] && groups[group].current) {
-        console.log('groups[group].current = ', groups[group].current);
-        slot = getSlot(group, groups);
-    } else if (availibleGroups[group] && availibleGroups[group].current) {
-        console.log('availibleGroups[group].current = ', availibleGroups[group].current);
-        slot = getSlot(group, availibleGroups);
+    if (groups[group]) {
+        if ("current" in groups[group]) {
+            console.log('groups[group].current = ', groups[group].current);
+            slot = getSlot(group, groups);
+        }
+    } else if (availibleGroups[group]) {
+        if ("current" in availibleGroups[group]) {
+            console.log('availibleGroups[group].current = ', availibleGroups[group].current);
+            slot = getSlot(group, availibleGroups);
+        }
     }
 
     console.log('getNextSlot return slot = ', slot);

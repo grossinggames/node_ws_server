@@ -58,6 +58,7 @@ VK.init(function() {
             if ("bottle" in result) {
                 chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.bottle + '</li>';
                 chat_field.scrollTop =  chat_field.scrollHeight;
+                bottle.style.transform = settings[result.bottle].angle;
             }
         } catch(e) {
             console.log("Error Message: " + e.message);
@@ -267,20 +268,23 @@ VK.init(function() {
 
 
     // ********************************************** Позиции **********************************************
-    var positionsDefault = [
-        [33,  377],
-        [53,  492],
-        [208, 577],
-        [362, 577],
-        [448, 477],
-        [469, 358],
-        [469, 243],
-        [448, 128],
-        [293,  43],
-        [139,  43],
-        [54,  147],
-        [32,  262]
-    ];
+    // Настройки слотов
+    var settings = [
+        { defPos: [33,  77],  angle: 18 },  // 0
+        { defPos: [53,  492], angle: 41 },  // 1
+        { defPos: [208, 577], angle: 77 },  // 2
+        { defPos: [362, 577], angle: 110 }, // 3
+        { defPos: [448, 477], angle: 135 }, // 4
+        { defPos: [469, 358], angle: 165 }, // 5
+        { defPos: [469, 243], angle: 200 }, // 6
+        { defPos: [448, 128], angle: 224 }, // 7
+        { defPos: [293, 43],  angle: 262 }, // 8
+        { defPos: [139, 43],  angle: 297 }, // 9
+        { defPos: [54,  147], angle: 322 }, // 10
+        { defPos: [32,  262], angle: 350 }  // 11
+    ]
+
+
 }, function() {
     // API initialization failed
     console.log('Ошибка инициализации');

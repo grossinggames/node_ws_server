@@ -72,7 +72,7 @@ function getNewIdGroup() {
 function addAvailableGroup(id, client) {
     //console.log('addAvailableGroup');
     groups.push({});
-    availibleGroups[id] = { slots: {"0": client}, current: 0 };
+    availibleGroups[id] = { slots: {"0": client}, current: 0, partner: false };
     client.slot = 0;
 }
 
@@ -246,7 +246,18 @@ socket.on('connection', function(client) {
         // Пользователь кликнул по бутылке.
         if ("bottle" in message) {
             if (message.bottle) {
-                sendMessageGroup(client.group, { bottle: {partner: getPartner()} });
+                var partner = getPartner();
+                if (availibleGroups[group]) {
+                    if ("partner" in availibleGroups[group]) {
+                        availibleGroups[group].partner = partner;
+                    }
+                } else if (groups[group]) {
+                    if ("partner" in groups[group]) {
+                        groups[group].partner = partner;
+                    }
+                }
+
+                sendMessageGroup(client.group, { bottle: {partner: partner} });
 
                 /*
                 var slot = getNextSlot(client.group);

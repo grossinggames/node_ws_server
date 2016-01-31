@@ -247,7 +247,7 @@ socket.on('connection', function(client) {
             }
         }
 
-        // Пользователь кликнул по бутылке.
+        // Пользователь кликнул по бутылке. Отсылаем в ответ партнера для поцелуя. Если парнера нет посылаем false
         if ("bottle" in message) {
             if (message.bottle) {
                 var partner = getPartner(client.group);

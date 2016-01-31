@@ -56,17 +56,23 @@ VK.init(function() {
                 chat_field.scrollTop =  chat_field.scrollHeight;
             }
 
-            // Бутылку крутит следующий слот или сейчас целуются слоты current partner
+            // Бутылка
             if ("bottle" in result) {
+                // Устанавливаем значение слота который крутит бутылку
                 if ("current" in result.bottle) {
                     current = result.bottle.current;
                     chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Current ' + current + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
+
+                // Устанавливаем партнера для поцелуя
                 if ("partner" in result.bottle) {
                     partner = result.bottle.partner;
                     if (partner >= 0 && partner < 12) {
                         bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
+                    } else {
+                        // Прекращаем крутить бутылку.
+                        bottle.style.transform = 'rotate(0deg)';
                     }
                     chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;

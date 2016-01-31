@@ -121,7 +121,7 @@ function sendMessageGroup(id, message) {
     }
 }
 
-// Отправить текущее состояние в группе по слотам всей группе
+// Отправить текущее состояние в группе по слотам всей группе и текущего крутящего бутылку
 function sendStateGroup(client) {
     var message = { slots: {} };
     for (var i = 0; i < maxClientOnGroup; i++) {
@@ -129,9 +129,11 @@ function sendStateGroup(client) {
 
         if (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: availibleGroups[client.group].slots[i].photo};
+            message.current = availibleGroups[client.group].current;
         }
         if (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: groups[client.group].slots[i].photo};
+            message.current = groups[client.group].current;
         }
     }
     sendMessageGroup(client.group, message);
@@ -247,19 +249,22 @@ socket.on('connection', function(client) {
         if ("bottle" in message) {
             if (message.bottle) {
                 var partner = getPartner(client.group);
+                var current;
                 console.log('partner = ' + partner);
 
                 if (availibleGroups[client.group]) {
                     if ("partner" in availibleGroups[client.group]) {
                         availibleGroups[client.group].partner = partner;
+                        current = availibleGroups[client.group].current;
                     }
                 } else if (groups[client.group]) {
                     if ("partner" in groups[client.group]) {
                         groups[client.group].partner = partner;
+                        current = groups[client.group].current;
                     }
                 }
 
-                sendMessageGroup(client.group, { bottle: {partner: partner} });
+                sendMessageGroup(client.group, { bottle: {current: current, partner: partner} });
 
                 /*
                 var slot = getNextSlot(client.group);

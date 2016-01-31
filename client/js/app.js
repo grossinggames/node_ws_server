@@ -62,16 +62,12 @@ VK.init(function() {
                     current = result.bottle.current;
                     chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Current ' + current + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';
-                    chat_field.scrollTop =  chat_field.scrollHeight;
                 }
                 if ("partner" in result.bottle) {
                     partner = result.bottle.partner;
                     if (partner >= 0 && partner < 12) {
                         bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
                     }
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Current ' + current + '</li>';
-                    chat_field.scrollTop =  chat_field.scrollHeight;
                     chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }

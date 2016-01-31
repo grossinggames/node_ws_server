@@ -205,7 +205,7 @@ function getPartner(group) {
     }
 
     if (slots.length > 0) {
-        return randomInteger(0, slots.length - 1);
+        return slots[ randomInteger(0, slots.length - 1) ];
     }
 
     return false;
@@ -252,7 +252,6 @@ socket.on('connection', function(client) {
             if (message.bottle) {
                 var partner = getPartner(client.group);
                 var current;
-                console.log('partner = ' + partner);
 
                 if (availibleGroups[client.group]) {
                     if ("partner" in availibleGroups[client.group]) {

@@ -247,13 +247,15 @@ socket.on('connection', function(client) {
         if ("bottle" in message) {
             if (message.bottle) {
                 var partner = getPartner();
-                if (availibleGroups[group]) {
-                    if ("partner" in availibleGroups[group]) {
-                        availibleGroups[group].partner = partner;
+                console.log('partner = ' + partner);
+
+                if (availibleGroups[client.group]) {
+                    if ("partner" in availibleGroups[client.group]) {
+                        availibleGroups[client.group].partner = partner;
                     }
-                } else if (groups[group]) {
-                    if ("partner" in groups[group]) {
-                        groups[group].partner = partner;
+                } else if (groups[client.group]) {
+                    if ("partner" in groups[client.group]) {
+                        groups[client.group].partner = partner;
                     }
                 }
 

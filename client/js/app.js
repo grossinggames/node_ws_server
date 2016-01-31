@@ -69,12 +69,14 @@ VK.init(function() {
                 if ("partner" in result.bottle) {
                     partner = result.bottle.partner;
                     console.log('1 partner = ' + String(partner));
+                    console.log('2 partner = ' + partner);
 
                     if (partner >= 0 && partner < 12) {
-                        console.log('2 partner = ' + String(partner));
+                        console.log('3 partner = ' + partner);
                         bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
                     } else {
                         // Прекращаем крутить бутылку.
+                        console.log('4 partner = ' + partner);
                         bottle.style.transform = 'rotate(0deg)';
                     }
                     chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';

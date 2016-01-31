@@ -41,7 +41,7 @@ VK.init(function() {
 
             // Обновления в слотах
             if ("slots" in result) {
-                for (key in result.slots) {
+                for (var key in result.slots) {
                     if (result.slots[key].photo) {
                         document.getElementById('player' + key).style.background = 'url(' + result.slots[key].photo + ') no-repeat';
                     } else {
@@ -68,6 +68,8 @@ VK.init(function() {
                 // Устанавливаем партнера для поцелуя
                 if ("partner" in result.bottle) {
                     partner = result.bottle.partner;
+                    console.log('partner = ' + String(partner));
+
                     if (partner >= 0 && partner < 12) {
                         bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
                     } else {

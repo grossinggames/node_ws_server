@@ -72,7 +72,7 @@ function getNewIdGroup() {
 function addAvailableGroup(id, client) {
     //console.log('addAvailableGroup');
     groups.push({});
-    availibleGroups[id] = { slots: {"0": client}, current: 0, partner: false };
+    availibleGroups[id] = { slots: {"0": client}, current: 0, partner: -1 };
     client.slot = 0;
 }
 
@@ -208,7 +208,7 @@ function getPartner(group) {
         return slots[ randomInteger(0, slots.length - 1) ];
     }
 
-    return false;
+    return -1;
 }
 
 

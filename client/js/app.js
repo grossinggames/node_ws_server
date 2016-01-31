@@ -58,7 +58,7 @@ VK.init(function() {
             if ("bottle" in result) {
                 chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.bottle + '</li>';
                 chat_field.scrollTop =  chat_field.scrollHeight;
-                bottle.style.transform = settings[result.bottle].angle;
+                bottle.style.transform = 'rotate(' + settings[result.bottle].angle + 'deg)';
             }
         } catch(e) {
             console.log("Error Message: " + e.message);

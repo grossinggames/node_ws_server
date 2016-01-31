@@ -9,6 +9,8 @@ VK.init(function() {
     var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
     var chat_field = document.getElementById('chat_field');
     var nick       = "Nick";
+    var current;
+    var partner;
 
     // Соединение открыто
     socket.onopen  = function() {
@@ -54,11 +56,22 @@ VK.init(function() {
                 chat_field.scrollTop =  chat_field.scrollHeight;
             }
 
-            // Бутылку крутит следующий слот
+            // Бутылку крутит следующий слот или сейчас целуются слоты current partner
             if ("bottle" in result) {
-                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.bottle + '</li>';
-                chat_field.scrollTop =  chat_field.scrollHeight;
-                bottle.style.transform = 'rotate(' + settings[result.bottle].angle + 'deg)';
+                if ("current" in result.bottle) {
+                    current = result.bottle.current;
+                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Current ' + current + '</li>';
+                    chat_field.scrollTop =  chat_field.scrollHeight;
+                }
+                if ("partner" in result.bottle) {
+                    partner = result.bottle.partner;
+                    if (partner >= 0 && partner < 12) {
+                        bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
+                    }
+
+                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';
+                    chat_field.scrollTop =  chat_field.scrollHeight;
+                }
             }
         } catch(e) {
             console.log("Error Message: " + e.message);

@@ -25,7 +25,7 @@ var groups = [];
 var availibleGroups = {};
 
 // Максимальное количество пользователей в группе
-var maxClientOnGroup = 3;
+var maxClientOnGroup = 12;
 
 
 // ***************************************** Методы для работы с группами *******************************
@@ -171,6 +171,42 @@ function getNextSlot(group) {
     return slot;
 }
 
+// Поиск партнера
+function getPartner(group) {
+    // формируем список доступных слотов
+    var slots = [];
+
+    if (availibleGroups[group]) {
+        if ("slots" in availibleGroups[group]) {
+            for (var i = 0; i < maxClientOnGroup; i++) {
+                if (availibleGroups[group].slots[i] && availibleGroups[group].current != i) {
+                    slots.push(i);
+                }
+            }
+        }
+    } else if (groups[group]) {
+        if ("slots" in groups[group]) {
+            for (var i = 0; i < maxClientOnGroup; i++) {
+                if (groups[group].slots[i] && groups[group].current != i) {
+                    slots.push(i);
+                }
+            }
+        }
+    }
+
+    function randomInteger(min, max) {
+        var rand = min - 0.5 + Math.random() * (max - min + 1);
+        rand = Math.round(rand);
+        return rand;
+    }
+
+    if (slots.lenght > 0) {
+        return randomInteger(0, slots.lenght - 1);
+    }
+
+    return false;
+}
+
 
 // ***************************************** Запуск websocket сервера *******************************
 var wsServer = require('ws').Server;
@@ -207,9 +243,12 @@ socket.on('connection', function(client) {
             }
         }
 
-        // Пользователь кликнул по бутылке
+        // Пользователь кликнул по бутылке.
         if ("bottle" in message) {
             if (message.bottle) {
+                sendMessageGroup(client.group, { bottle: {partner: getPartner()} });
+
+                /*
                 var slot = getNextSlot(client.group);
                 if (availibleGroups[client.group] && availibleGroups[client.group].current) {
                     availibleGroups[client.group].current = slot;
@@ -221,6 +260,7 @@ socket.on('connection', function(client) {
                     sendMessageGroup(client.group, {bottle: slot});
                     return;
                 }
+                */
             }
         }
     });

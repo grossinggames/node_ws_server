@@ -182,6 +182,7 @@ function getPartner(group) {
         if ("slots" in availibleGroups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
                 if (availibleGroups[group].slots[i] && availibleGroups[group].current != i) {
+                    console.log('current = ' + availibleGroups[group].current + ' i = ' + i);
                     slots.push(i);
                 }
             }
@@ -190,6 +191,7 @@ function getPartner(group) {
         if ("slots" in groups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
                 if (groups[group].slots[i] && groups[group].current != i) {
+                    console.log('current = ' + groups[group].current + ' i = ' + i);
                     slots.push(i);
                 }
             }

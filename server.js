@@ -200,8 +200,8 @@ function getPartner(group) {
         return rand;
     }
 
-    if (slots.lenght > 0) {
-        return randomInteger(0, slots.lenght - 1);
+    if (slots.length > 0) {
+        return randomInteger(0, slots.length - 1);
     }
 
     return false;
@@ -246,7 +246,7 @@ socket.on('connection', function(client) {
         // Пользователь кликнул по бутылке.
         if ("bottle" in message) {
             if (message.bottle) {
-                var partner = getPartner();
+                var partner = getPartner(client.group);
                 console.log('partner = ' + partner);
 
                 if (availibleGroups[client.group]) {

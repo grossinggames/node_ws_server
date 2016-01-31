@@ -68,9 +68,10 @@ VK.init(function() {
                 // Устанавливаем партнера для поцелуя
                 if ("partner" in result.bottle) {
                     partner = result.bottle.partner;
-                    console.log('partner = ' + String(partner));
+                    console.log('1 partner = ' + String(partner));
 
                     if (partner >= 0 && partner < 12) {
+                        console.log('2 partner = ' + String(partner));
                         bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
                     } else {
                         // Прекращаем крутить бутылку.

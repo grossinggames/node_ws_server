@@ -97,6 +97,11 @@ VK.init(function() {
 
     // Отправить сообщение
     function sendMessage() {
+        // Проверка на пустоту сообщения
+        if (text_field.value == '') {
+            return false;
+        }
+        
         socket.send( JSON.stringify({msg: text_field.value}) );
         text_field.value = "";
     }
@@ -110,7 +115,7 @@ VK.init(function() {
 
     var send = document.getElementById('send');
 
-    // Клик отпраки сообщения
+    // Клик отправки сообщения
     send.onclick = function () {
         sendMessage();
     };

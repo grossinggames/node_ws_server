@@ -106,6 +106,11 @@ function outClient(client) {
 // ***************************************** Методы отправки сообщений в группы *******************************
 // Отправить сообщения всей группе
 function sendMessageGroup(id, message) {
+    // Если это сообщение в чат пустое не отправляем его
+    if ( ("msg" in message) && (message.msg == "") ) {
+        return false;
+    }
+
     if (availibleGroups[id] || groups[id]) {
         for (var i = 0; i < maxClientOnGroup; i++) {
             // Отсылаем в сообщении каждому пользователю его slot в группе
@@ -121,16 +126,19 @@ function sendMessageGroup(id, message) {
     }
 }
 
-// Отправить текущее состояние в группе по слотам всей группе и текущего крутящего бутылку
+// Отправить текущее состояние группы каждому клиенту. (Состояние слотов, кто крутит бутылку)
 function sendStateGroup(client) {
     var message = { slots: {} };
     for (var i = 0; i < maxClientOnGroup; i++) {
         message.slots[i] = 0;
-
+        
+        // Если клиент в не полной группе
         if (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: availibleGroups[client.group].slots[i].photo};
             message.current = availibleGroups[client.group].current;
         }
+        
+        // Если клиент в полной группе
         if (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: groups[client.group].slots[i].photo};
             message.current = groups[client.group].current;

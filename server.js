@@ -72,7 +72,12 @@ function getNewIdGroup() {
 function addAvailableGroup(id, client) {
     //console.log('addAvailableGroup');
     groups.push({});
-    availibleGroups[id] = { slots: {"0": client}, current: 0, partner: -1 };
+    availibleGroups[id] = 
+    { 
+        slots: {"0": client}, 
+        current: 0, 
+        partners: [0, 0]
+    };
     client.slot = 0;
 }
 
@@ -135,13 +140,13 @@ function sendStateGroup(client) {
         // Если клиент в не полной группе
         if (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: availibleGroups[client.group].slots[i].photo};
-            message.current = availibleGroups[client.group].current;
+            //message.current = availibleGroups[client.group].current;
         }
         
         // Если клиент в полной группе
         if (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: groups[client.group].slots[i].photo};
-            message.current = groups[client.group].current;
+            //message.current = groups[client.group].current;
         }
     }
     sendMessageGroup(client.group, message);
@@ -189,8 +194,8 @@ function getPartner(group) {
     if (availibleGroups[group]) {
         if ("slots" in availibleGroups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
-                if (availibleGroups[group].slots[i] && availibleGroups[group].current != i) {
-                    console.log('current = ' + availibleGroups[group].current + ' i = ' + i);
+                if ( (availibleGroups[group].slots[i]) && (availibleGroups[group].partners[0] != i) ) {
+                    // console.log('partners[0] = ' + availibleGroups[group].partners[0] + ' i = ' + i);
                     slots.push(i);
                 }
             }
@@ -198,8 +203,8 @@ function getPartner(group) {
     } else if (groups[group]) {
         if ("slots" in groups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
-                if (groups[group].slots[i] && groups[group].current != i) {
-                    console.log('current = ' + groups[group].current + ' i = ' + i);
+                if ( (groups[group].slots[i]) && (groups[group].partners[0] != i) ) {
+                    // console.log('partners[0] = ' + groups[group].partners[0] + ' i = ' + i);
                     slots.push(i);
                 }
             }
@@ -228,7 +233,7 @@ var socket      = new wsServer({server: server});
 socket.on('connection', function(client) {
     client.group = addClient(client);
     sendStateGroup(client);
-    //traceState();
+    traceState();
 
     // Сообщения от пользователя
     client.on('message', function(message) {
@@ -243,6 +248,7 @@ socket.on('connection', function(client) {
         // Пользователь отправил сообщение
         if ("msg" in message) {        
             sendMessageGroup(client.group, {msg: message.msg});
+            traceState();
         }
 
         // Пользователь хочет сменить стол
@@ -253,41 +259,54 @@ socket.on('connection', function(client) {
                 client.group = addClient(client);
                 sendStateGroup(client);
             }
+            traceState();
         }
 
-        // Пользователь кликнул по бутылке. Отсылаем в ответ партнера для поцелуя. Если парнера нет посылаем false
+        // Пользователь кликнул по бутылке. Отсылаем в ответ партнера для поцелуя. Если парнера нет посылаем -1
         if ("bottle" in message) {
             if (message.bottle) {
-                var partner = getPartner(client.group);
-                var current;
+                // Избавиться от partner1 partner2
+                var partner1;
+                var partner2;
 
                 if (availibleGroups[client.group]) {
-                    if ("partner" in availibleGroups[client.group]) {
-                        availibleGroups[client.group].partner = partner;
-                        current = availibleGroups[client.group].current;
+                    if ("partners" in availibleGroups[client.group]) {
+                        availibleGroups[client.group].partners[0] = availibleGroups[client.group].current;
+                        partner2 = getPartner(client.group);
+                        availibleGroups[client.group].partners[1] = partner2;
+                        partner1 = availibleGroups[client.group].partners[0];
                     }
                 } else if (groups[client.group]) {
-                    if ("partner" in groups[client.group]) {
-                        groups[client.group].partner = partner;
-                        current = groups[client.group].current;
+                    if ("partners" in groups[client.group]) {
+                        groups[client.group].partners[0] = groups[client.group].current;
+                        partner2 = getPartner(client.group);
+                        groups[client.group].partners[1] = partner2;
+                        partner1 = groups[client.group].partners[0];
                     }
                 }
 
-                sendMessageGroup(client.group, { bottle: {current: current, partner: partner} });
+                // Отправка тех кто будет целоваться
+                sendMessageGroup(client.group, { bottle: {partners: [partner1, partner2]} });
 
-                /*
+                // Сделать интервал и запускать только после окончания поцелуев прошлой пары
+                // Отправка номера кто будет крутить
                 var slot = getNextSlot(client.group);
+                
+                // Отправка всей группе того кто крутит бутылку
                 if (availibleGroups[client.group] && availibleGroups[client.group].current) {
                     availibleGroups[client.group].current = slot;
-                    sendMessageGroup(client.group, {bottle: slot});
+                    //availibleGroups[client.group].partners[0] = slot;
+                    sendMessageGroup(client.group, { bottle: {current: slot} });
+                    traceState();
                     return;
                 }
                 if (groups[client.group] && groups[client.group].current) {
                     groups[client.group].current = slot;
-                    sendMessageGroup(client.group, {bottle: slot});
+                    //groups[client.group].partners[0] = slot;
+                    sendMessageGroup(client.group, { bottle: {current: slot} });
+                    traceState();
                     return;
                 }
-                */
             }
         }
     });
@@ -295,19 +314,19 @@ socket.on('connection', function(client) {
     client.on('close', function() {
         outClient(client);
         sendStateGroup(client);
-        //traceState();
+        traceState();
     });
 });
-
 
 
 // ***************************************** Показать состояние в группах *******************************
 // Логгирование состояний
 function traceState() {
+    /*
     for (var i = 0; i < groups.length; i++) {
         for (var j = 0; j < maxClientOnGroup; j++) {
             if (groups[i].slots && groups[i].slots[i]) {
-                console.log('groups[' + i + '] = [' + groups[i].slots[j].id + ']');
+                console.log('groups[' + i + '] = [' + groups[i].slots[j] + ']');
             }
         }
     }
@@ -315,9 +334,10 @@ function traceState() {
     for (var key in availibleGroups) {
         for (var i = 0; i < maxClientOnGroup; i++) {
             if (availibleGroups[key].slots && availibleGroups[key].slots[i]) {
-                console.log('availibleGroups[' + key + '] = [' + availibleGroups[key].slots[i].id + ']');
+                console.log('availibleGroups[' + key + '] = [' + availibleGroups[key].slots[i] + ']');
             }
         }
     }
     console.log('*****************************************');
+    */
 }

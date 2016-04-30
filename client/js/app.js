@@ -11,6 +11,7 @@ VK.init(function() {
     var nick       = "Nick";
     var current;
     var partner;
+    var partners;
 
     // Соединение открыто
     socket.onopen  = function() {
@@ -61,22 +62,22 @@ VK.init(function() {
                 // Устанавливаем значение слота который крутит бутылку
                 if ("current" in result.bottle) {
                     current = result.bottle.current;
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Current ' + current + '</li>';
+                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Крутит бутылку ' + current + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
 
                 // Устанавливаем партнера для поцелуя
-                if ("partner" in result.bottle) {
-                    partner = result.bottle.partner;
+                if ("partners" in result.bottle) {
+                    partners = result.bottle.partners;
 
-                    if (partner >= 0 && partner < 12) {
-                        bottle.style.transform = 'rotate(' + settings[partner].angle + 'deg)';
+                    if (partners[1] >= 0 && partners[1] < 13) {
+                        bottle.style.transform = 'rotate(' + settings[ partners[1] ].angle + 'deg)';
                     } else {
                         // Прекращаем крутить бутылку.
                         // Добавить переход хода
                         bottle.style.transform = 'rotate(0deg)';
                     }
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Partner ' + partner + '</li>';
+                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Целуются ' + partners[0] + ' и ' + partners[1] + ' </li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
             }
@@ -232,6 +233,7 @@ VK.init(function() {
     */
 
     // ********************************************** Звук **********************************************
+    /*
     // Кнопка
     var sound = document.getElementById('sound');
     var soundOn = true;
@@ -271,7 +273,7 @@ VK.init(function() {
         }
     }
 
-
+    */
     // ********************************************** Бутылка **********************************************
     // Бутылка
     var bottle = document.getElementById('bottle');

@@ -8,10 +8,9 @@ VK.init(function() {
 
     var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
     var chat_field = document.getElementById('chat_field');
-    var nick       = "Nick";
-    var current;
-    var partner;
-    var partners;
+    var nick       = "Nick"; // Ник того кто играет
+    var current; // Кто крутит бутылку
+    var partners; // Кто целуется [1, 2]
 
     // Соединение открыто
     socket.onopen  = function() {

@@ -29,7 +29,7 @@ var maxClientOnGroup = 12;
 
 
 // ***************************************** Методы для работы с группами *******************************
-// Метод получения id группы
+// Получить index группы
 function addClient(client) {
     //console.log('addClient');
     var id = getAvailableGroup(client);
@@ -40,7 +40,7 @@ function addClient(client) {
     return id;
 }
 
-// Метод получения группы из списка доступных групп
+// Получить свободную группу
 function getAvailableGroup(client) {
     // console.log('getAvailableGroup');
     // Отдавать свою же комнату в случае если нет других, а не создавать новую
@@ -51,6 +51,8 @@ function getAvailableGroup(client) {
                 if (!availibleGroups[key].slots[i]) {
                     availibleGroups[key].slots[i] = client;
                     client.slot = i;
+
+                    // Если все слоты заняты переносим в список полных групп
                     if (i == maxClientOnGroup - 1) {
                         groups[key] = availibleGroups[key];
                         delete availibleGroups[key];

@@ -135,7 +135,8 @@ function sendMessageGroup(id, message) {
 
 // Отправить текущее состояние группы каждому клиенту. (Состояние слотов, кто крутит бутылку)
 function sendStateGroup(client) {
-    var message = { slots: {} };
+    var message = { slots: {}, room: client.group };
+    
     for (var i = 0; i < maxClientOnGroup; i++) {
         message.slots[i] = 0;
         

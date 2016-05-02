@@ -50,6 +50,12 @@ VK.init(function() {
                 }
             }
 
+            // Обновления в слотах
+            if ("room" in result) {
+                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Комната ' + result.room + '</li>';
+                chat_field.scrollTop =  chat_field.scrollHeight;
+            }
+
             // Новое сообщние
             if ("msg" in result) {
                 chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.msg + '</li>';

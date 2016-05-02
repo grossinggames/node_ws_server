@@ -8,6 +8,7 @@ VK.init(function() {
 
     var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
     var chat_field = document.getElementById('chat_field');
+    var room = document.getElementById('room');
     var nick       = "Nick"; // Ник того кто играет
     var current; // Кто крутит бутылку
     var partners; // Кто целуется [1, 2]
@@ -52,8 +53,7 @@ VK.init(function() {
 
             // Обновления в слотах
             if ("room" in result) {
-                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Комната ' + result.room + '</li>';
-                chat_field.scrollTop =  chat_field.scrollHeight;
+                room.innerHTML = 'Комната ' + result.room;
             }
 
             // Новое сообщние

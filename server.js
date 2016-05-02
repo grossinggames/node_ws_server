@@ -1,23 +1,23 @@
-// ***************************************** Обработка неотловленных ошибок *******************************
+// ******************** Обработка неотловленных ошибок********************
 // Отлавливаем необработанные исключения
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
 });
 
 
-// ***************************************** Настройка framework express *******************************
+// ******************** Настройка framework express ********************
 var express = require('express');
 var app     = express();
 app.use( express.static('client') );
 
 
-// ***************************************** Запуск http сервера *******************************
+// ******************** Запуск http сервера ********************
 var http = require('http');
 var server = http.createServer(app);
 server.listen(process.env.PORT);
 
 
-// ***************************************** Состояния групп *******************************
+// ******************** Состояния групп ********************
 // Все созданные группы с количеством участников в каждой из них
 var groups = [];
 
@@ -28,8 +28,8 @@ var availibleGroups = {};
 var maxClientOnGroup = 12;
 
 
-// ***************************************** Методы для работы с группами *******************************
-// Получить index группы
+// ******************** Методы для работы с группами ********************
+// Метод получения id группы
 function addClient(client) {
     //console.log('addClient');
     var id = getAvailableGroup(client);
@@ -40,7 +40,7 @@ function addClient(client) {
     return id;
 }
 
-// Получить свободную группу
+// Метод получения группы из списка доступных групп
 function getAvailableGroup(client) {
     // console.log('getAvailableGroup');
     // Отдавать свою же комнату в случае если нет других, а не создавать новую
@@ -51,8 +51,6 @@ function getAvailableGroup(client) {
                 if (!availibleGroups[key].slots[i]) {
                     availibleGroups[key].slots[i] = client;
                     client.slot = i;
-
-                    // Если все слоты заняты переносим в список полных групп
                     if (i == maxClientOnGroup - 1) {
                         groups[key] = availibleGroups[key];
                         delete availibleGroups[key];
@@ -93,7 +91,7 @@ function outClient(client) {
             availibleGroups[id].slots[slot] = null;
             return true;
         }
-        console.log('Error on function outClient not found availibleGroups[id]');
+        console.log('Ошибка в функции outClient не нашли клиента в availibleGroups[id]');
     }
 
     if (groups[id]) {
@@ -103,14 +101,25 @@ function outClient(client) {
             groups[id] = {}; // Возможно нужно присвоить другое значение например null
             return true;
         }
-        console.log('Error on function outClient not found availibleGroups[id]');
+        console.log('Ошибка в функции outClient не нашли клиента в groups[id]');
     }
 
     return false;
 }
 
 
-// ***************************************** Методы отправки сообщений в группы *******************************
+// ******************** Методы отправки сообщений в группы ********************
+// Отправить сообщение клиенту
+function sendMessageClient(client, message) {
+    try {
+        client.send( JSON.stringify(message) );
+    } catch (err) {
+        outClient(client);
+        sendStateGroup(client);
+        console.log('ERROR Ошибка при отправке сообщения клиенту: ', err);
+    }
+}
+
 // Отправить сообщения всей группе
 function sendMessageGroup(id, message) {
     // Если это сообщение в чат пустое не отправляем его
@@ -123,12 +132,13 @@ function sendMessageGroup(id, message) {
             // Отсылаем в сообщении каждому пользователю его slot в группе
             message.slot = i;
 
-            if (availibleGroups[id] && availibleGroups[id].slots && availibleGroups[id].slots[i]) {
-                availibleGroups[id].slots[i].send( JSON.stringify(message) );
+            if (availibleGroups[id].slots && availibleGroups[id].slots[i]) {
+                sendMessageClient(availibleGroups[id].slots[i], message);
             }
             if (groups[id] && groups[id].slots && groups[id].slots[i]) {
-                groups[id].slots[i].send( JSON.stringify(message) );
+                sendMessageClient(groups[id].slots[i], message);
             }
+
         }
     }
 }
@@ -141,13 +151,18 @@ function sendStateGroup(client) {
         message.slots[i] = 0;
         
         // Если клиент в не полной группе
-        if (availibleGroups[client.group] && availibleGroups[client.group].slots && availibleGroups[client.group].slots[i] && availibleGroups[client.group].slots[i].group >= 0) {
+        if (availibleGroups[client.group] && 
+            availibleGroups[client.group].slots && 
+            availibleGroups[client.group].slots[i] && 
+            availibleGroups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: availibleGroups[client.group].slots[i].photo};
             //message.current = availibleGroups[client.group].current;
         }
         
         // Если клиент в полной группе
-        if (groups[client.group] && groups[client.group].slots && groups[client.group].slots[i] && groups[client.group].slots[i].group >= 0) {
+        if (groups[client.group] && groups[client.group].slots && 
+            groups[client.group].slots[i] && 
+            groups[client.group].slots[i].group >= 0) {
             message.slots[i] = {photo: groups[client.group].slots[i].photo};
             //message.current = groups[client.group].current;
         }
@@ -156,7 +171,7 @@ function sendStateGroup(client) {
 }
 
 
-// ***************************************** Бутылочка *******************************
+// ******************** Бутылочка ********************
 // Получить следующего кто крутит бутылочку
 function getNextSlot(group) {
 
@@ -197,7 +212,8 @@ function getPartner(group) {
     if (availibleGroups[group]) {
         if ("slots" in availibleGroups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
-                if ( (availibleGroups[group].slots[i]) && (availibleGroups[group].partners[0] != i) ) {
+                if ( (availibleGroups[group].slots[i]) && 
+                     (availibleGroups[group].partners[0] != i) ) {
                     // console.log('partners[0] = ' + availibleGroups[group].partners[0] + ' i = ' + i);
                     slots.push(i);
                 }
@@ -206,7 +222,8 @@ function getPartner(group) {
     } else if (groups[group]) {
         if ("slots" in groups[group]) {
             for (var i = 0; i < maxClientOnGroup; i++) {
-                if ( (groups[group].slots[i]) && (groups[group].partners[0] != i) ) {
+                if ( (groups[group].slots[i]) && 
+                     (groups[group].partners[0] != i) ) {
                     // console.log('partners[0] = ' + groups[group].partners[0] + ' i = ' + i);
                     slots.push(i);
                 }
@@ -228,7 +245,7 @@ function getPartner(group) {
 }
 
 
-// ***************************************** Запуск websocket сервера *******************************
+// ******************** Запуск websocket сервера ********************
 var wsServer = require('ws').Server;
 var socket      = new wsServer({server: server});
 
@@ -298,14 +315,12 @@ socket.on('connection', function(client) {
                 // Отправка всей группе того кто крутит бутылку
                 if (availibleGroups[client.group] && availibleGroups[client.group].current) {
                     availibleGroups[client.group].current = slot;
-                    //availibleGroups[client.group].partners[0] = slot;
                     sendMessageGroup(client.group, { bottle: {current: slot} });
                     traceState();
                     return;
                 }
                 if (groups[client.group] && groups[client.group].current) {
                     groups[client.group].current = slot;
-                    //groups[client.group].partners[0] = slot;
                     sendMessageGroup(client.group, { bottle: {current: slot} });
                     traceState();
                     return;
@@ -322,7 +337,7 @@ socket.on('connection', function(client) {
 });
 
 
-// ***************************************** Показать состояние в группах *******************************
+// ******************** Показать состояние в группах ********************
 // Логгирование состояний
 function traceState() {
     /*

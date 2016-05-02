@@ -8,8 +8,8 @@ VK.init(function() {
 
     var socket     = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port);
     var chat_field = document.getElementById('chat_field');
-    var room = document.getElementById('room');
-    var nick       = "Nick"; // Ник того кто играет
+    var room       = document.getElementById('room');
+    var first_name = ""; // Имя игрока
     var current; // Кто крутит бутылку
     var partners; // Кто целуется [1, 2]
 
@@ -18,8 +18,9 @@ VK.init(function() {
         console.log("Websocket соединение установлено.");
 
         VK.api("users.get", {fields: "photo_100"}, function(data) { 
-            if (data && data.response && data.response[0] && data.response[0].photo_100) {
-                socket.send( JSON.stringify({photo: data.response[0].photo_100}) );
+            if (data && data.response && data.response[0] && data.response[0].photo_100 && data.response[0].first_name) {
+                first_name = data.response[0].first_name;
+                socket.send( JSON.stringify({photo: data.response[0].photo_100, first_name: first_name}) );
             }
         });
 
@@ -57,8 +58,8 @@ VK.init(function() {
             }
 
             // Новое сообщние
-            if ("msg" in result) {
-                chat_field.innerHTML += '<li><strong>' + nick + ': </strong>' + result.msg + '</li>';
+            if ( ("msg" in result) && ("first_name" in result) ) {
+                chat_field.innerHTML += '<li><strong>' + result.first_name + ': </strong>' + result.msg + '</li>';
                 chat_field.scrollTop =  chat_field.scrollHeight;
             }
 
@@ -67,7 +68,7 @@ VK.init(function() {
                 // Устанавливаем значение слота который крутит бутылку
                 if ("current" in result.bottle) {
                     current = result.bottle.current;
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Крутит бутылку ' + current + '</li>';
+                    chat_field.innerHTML += '<li>Крутит бутылку ' + current + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
 
@@ -82,7 +83,7 @@ VK.init(function() {
                         // Добавить переход хода
                         bottle.style.transform = 'rotate(0deg)';
                     }
-                    chat_field.innerHTML += '<li><strong>' + nick + ': </strong>Целуются ' + partners[0] + ' и ' + partners[1] + ' </li>';
+                    chat_field.innerHTML += '<li>Целуются ' + partners[0] + ' и ' + partners[1] + ' </li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
             }

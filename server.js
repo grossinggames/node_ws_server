@@ -129,7 +129,7 @@ function sendMessageGroup(id, message) {
 
     if (availibleGroups[id] || groups[id]) {
         for (var i = 0; i < maxClientOnGroup; i++) {
-            // Отсылаем в сообщении каждому пользователю его slot в группе
+            // Дополнительно отсылаем в сообщении каждому пользователю его slot в группе
             message.slot = i;
 
             if (availibleGroups[id].slots && availibleGroups[id].slots[i]) {
@@ -259,15 +259,21 @@ socket.on('connection', function(client) {
     client.on('message', function(message) {
         message = JSON.parse(message);
 
+        // Объединить всю информацию о клиенте в единый объект ссылка на аву, имя, id, фамилия и тд
         // Пользователь дал ссылку на свою аву
         if ("photo" in message) {
             client.photo = message.photo;
             sendStateGroup(client);
         }
+        // Пользователь свое имя
+        if ("first_name" in message) {
+            client.first_name = message.first_name;
+        }
 
         // Пользователь отправил сообщение
         if ("msg" in message) {        
-            sendMessageGroup(client.group, {msg: message.msg});
+            var first_name = client.first_name || "Имя не определено";
+            sendMessageGroup(client.group, {msg: message.msg, first_name: first_name});
             traceState();
         }
 

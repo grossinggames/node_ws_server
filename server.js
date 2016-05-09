@@ -272,9 +272,10 @@ socket.on('connection', function(client) {
 
         // Пользователь отправил сообщение
         if ("msg" in message) {        
-            var first_name = client.first_name || "Имя не определено";
-            sendMessageGroup(client.group, {msg: message.msg, first_name: first_name});
-            traceState();
+            if (client.first_name) {
+                sendMessageGroup(client.group, {msg: message.msg, first_name: client.first_name});
+                traceState();
+            }
         }
 
         // Пользователь хочет сменить стол

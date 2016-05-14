@@ -31,7 +31,6 @@ var maxClientOnGroup = 12;
 // ******************** Методы для работы с группами ********************
 // Метод получения id группы
 function addClient(client) {
-    //console.log('addClient');
     var id = getAvailableGroup(client);
     if (!id) {
         id = getNewIdGroup();
@@ -42,15 +41,19 @@ function addClient(client) {
 
 // Метод получения группы из списка доступных групп
 function getAvailableGroup(client) {
-    // console.log('getAvailableGroup');
     // Отдавать свою же комнату в случае если нет других, а не создавать новую
-    
     for (var key in availibleGroups) {
         if (key != client.group) {
             for (var i = 0; i < maxClientOnGroup; i++) {
                 if (!availibleGroups[key].slots[i]) {
+                    
+                    // Добавляем клиента в группу доступных
+                    // (Вынести отдельно)
                     availibleGroups[key].slots[i] = client;
                     client.slot = i;
+                    
+                    // Если все слоты заняты, переносим группу в список доступных
+                    // (Вынести отдельно)
                     if (i == maxClientOnGroup - 1) {
                         groups[key] = availibleGroups[key];
                         delete availibleGroups[key];
@@ -70,28 +73,27 @@ function getNewIdGroup() {
 
 // Метод добавления новой группы в списоки групп
 function addAvailableGroup(id, client) {
-    //console.log('addAvailableGroup');
     groups.push({});
     availibleGroups[id] = 
     { 
-        slots: {"0": client}, 
-        current: 0, 
-        partners: [0, 0]
+        slots:    {"0": client}, 
+        current:  0, 
+        partners: [0, 0],
+        timer:    {}
     };
     client.slot = 0;
 }
 
 // Выход клиента из группы
 function outClient(client) {
-    //console.log('outClient');
-    var id   = client.group
+    var id   = client.group;
     var slot = client.slot;
     if (availibleGroups[id]) {
         if (availibleGroups[id].slots && availibleGroups[id].slots[slot]) {
             availibleGroups[id].slots[slot] = null;
             return true;
         }
-        console.log('Ошибка в функции outClient не нашли клиента в availibleGroups[id]');
+        console.log('Error in function outClient not client in availibleGroups[id]');
     }
 
     if (groups[id]) {
@@ -101,7 +103,7 @@ function outClient(client) {
             groups[id] = {}; // Возможно нужно присвоить другое значение например null
             return true;
         }
-        console.log('Ошибка в функции outClient не нашли клиента в groups[id]');
+        console.log('Error in function outClient not client in groups[id]');
     }
 
     return false;
@@ -116,7 +118,7 @@ function sendMessageClient(client, message) {
     } catch (err) {
         outClient(client);
         sendStateGroup(client);
-        console.log('ERROR Ошибка при отправке сообщения клиенту: ', err);
+        console.log('Error in function sendMessageClient err = ', err);
     }
 }
 
@@ -244,6 +246,24 @@ function getPartner(group) {
     return -1;
 }
 
+// Переход хода бутылки
+function changeCurrent(idGroup) {
+    var slot = getNextSlot(idGroup);
+    
+    // Отправка всей группе того кто крутит бутылку
+    if (availibleGroups[idGroup]) {
+        availibleGroups[idGroup].current = slot;
+        sendMessageGroup(idGroup, { bottle: {current: slot} });
+        traceState();
+        return;
+    }
+    if (groups[idGroup]) {
+        groups[idGroup].current = slot;
+        sendMessageGroup(idGroup, { bottle: {current: slot} });
+        traceState();
+        return;
+    }
+}
 
 // ******************** Запуск websocket сервера ********************
 var wsServer = require('ws').Server;
@@ -292,7 +312,7 @@ socket.on('connection', function(client) {
         // Пользователь кликнул по бутылке. Отсылаем в ответ партнера для поцелуя. Если парнера нет посылаем -1
         if ("bottle" in message) {
             if (message.bottle) {
-                // Избавиться от partner1 partner2
+                // Избавиться от partner1 partner2 когда удалится availibleGroups
                 var partner1;
                 var partner2;
 
@@ -315,23 +335,12 @@ socket.on('connection', function(client) {
                 // Отправка тех кто будет целоваться
                 sendMessageGroup(client.group, { bottle: {partners: [partner1, partner2]} });
 
-                // Сделать интервал и запускать только после окончания поцелуев прошлой пары
-                // Отправка номера кто будет крутить
-                var slot = getNextSlot(client.group);
-                
-                // Отправка всей группе того кто крутит бутылку
-                if (availibleGroups[client.group] && availibleGroups[client.group].current) {
-                    availibleGroups[client.group].current = slot;
-                    sendMessageGroup(client.group, { bottle: {current: slot} });
-                    traceState();
-                    return;
-                }
-                if (groups[client.group] && groups[client.group].current) {
-                    groups[client.group].current = slot;
-                    sendMessageGroup(client.group, { bottle: {current: slot} });
-                    traceState();
-                    return;
-                }
+                // Передача хода по таймауту
+                availibleGroups[client.group].timer = setTimeout( 
+                    function() {
+                        changeCurrent(client.group);
+                    }, 5000
+                );
             }
         }
     });

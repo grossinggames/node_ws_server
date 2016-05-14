@@ -54,7 +54,7 @@ VK.init(function() {
 
             // Обновления в слотах
             if ("room" in result) {
-                room.innerHTML = 'Стол ' + result.room;
+                room.innerHTML = 'Стол ' + (++result.room);
             }
 
             // Новое сообщние

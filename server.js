@@ -29,7 +29,7 @@ var maxClientOnGroup = 12;
 
 
 // ******************** Методы для работы с группами ********************
-// Метод получения id группы
+// Метод добавления клиента в группу и возрат id группы
 function addClient(client) {
     var id = getAvailableGroup(client);
     if (!id) {
@@ -66,7 +66,7 @@ function getAvailableGroup(client) {
     return false;
 }
 
-// Метод получения id группы
+// Метод получения новой id группы
 function getNewIdGroup() {
     return groups.length;
 }
@@ -252,18 +252,63 @@ function changeCurrent(idGroup) {
     
     // Отправка всей группе того кто крутит бутылку
     if (availibleGroups[idGroup]) {
-        availibleGroups[idGroup].current = slot;
-        sendMessageGroup(idGroup, { bottle: {current: slot} });
-        traceState();
-        return;
+        if ("slots" in availibleGroups[idGroup]) {
+            availibleGroups[idGroup].current = slot;
+            sendMessageGroup(idGroup, { bottle: {current: slot} });
+            traceState();
+            //return;
+        }
     }
     if (groups[idGroup]) {
-        groups[idGroup].current = slot;
-        sendMessageGroup(idGroup, { bottle: {current: slot} });
-        traceState();
-        return;
+        if ("slots" in groups[idGroup]) {
+            groups[idGroup].current = slot;
+            console.log('groups[idGroup] = ', groups[idGroup]);
+            sendMessageGroup(idGroup, { bottle: {current: slot} });
+            traceState();
+            //return;
+        }
     }
+    availibleGroups[idGroup].timer = setTimeout( 
+        function() {
+            clickBottle(idGroup);
+        }, 5000
+    );
 }
+
+// Имитация клика по бутылке
+function clickBottle(idGroup) {
+    // Избавиться от partner1 partner2 когда удалится availibleGroups
+    var partner1;
+    var partner2;
+
+    if (availibleGroups[idGroup]) {
+        if ("partners" in availibleGroups[idGroup]) {
+            availibleGroups[idGroup].partners[0] = availibleGroups[idGroup].current;
+            partner2 = getPartner(idGroup);
+            availibleGroups[idGroup].partners[1] = partner2;
+            partner1 = availibleGroups[idGroup].partners[0];
+        }
+    } else if (groups[idGroup]) {
+        if ("partners" in groups[idGroup]) {
+            groups[idGroup].partners[0] = groups[idGroup].current;
+            partner2 = getPartner(idGroup);
+            groups[idGroup].partners[1] = partner2;
+            partner1 = groups[idGroup].partners[0];
+        }
+    }
+
+    // Отправка тех кто будет целоваться
+    sendMessageGroup(idGroup, { bottle: {partners: [partner1, partner2]} });
+
+    clearTimeout(availibleGroups[idGroup].timer);
+    // Передача хода по таймауту
+    availibleGroups[idGroup].timer = setTimeout( 
+        function() {
+            changeCurrent(idGroup);
+        }, 5000
+    );
+}
+
 
 // ******************** Запуск websocket сервера ********************
 var wsServer = require('ws').Server;
@@ -312,35 +357,7 @@ socket.on('connection', function(client) {
         // Пользователь кликнул по бутылке. Отсылаем в ответ партнера для поцелуя. Если парнера нет посылаем -1
         if ("bottle" in message) {
             if (message.bottle) {
-                // Избавиться от partner1 partner2 когда удалится availibleGroups
-                var partner1;
-                var partner2;
-
-                if (availibleGroups[client.group]) {
-                    if ("partners" in availibleGroups[client.group]) {
-                        availibleGroups[client.group].partners[0] = availibleGroups[client.group].current;
-                        partner2 = getPartner(client.group);
-                        availibleGroups[client.group].partners[1] = partner2;
-                        partner1 = availibleGroups[client.group].partners[0];
-                    }
-                } else if (groups[client.group]) {
-                    if ("partners" in groups[client.group]) {
-                        groups[client.group].partners[0] = groups[client.group].current;
-                        partner2 = getPartner(client.group);
-                        groups[client.group].partners[1] = partner2;
-                        partner1 = groups[client.group].partners[0];
-                    }
-                }
-
-                // Отправка тех кто будет целоваться
-                sendMessageGroup(client.group, { bottle: {partners: [partner1, partner2]} });
-
-                // Передача хода по таймауту
-                availibleGroups[client.group].timer = setTimeout( 
-                    function() {
-                        changeCurrent(client.group);
-                    }, 5000
-                );
+                clickBottle(client.group);
             }
         }
     });

@@ -68,7 +68,7 @@ VK.init(function() {
                 // Устанавливаем значение слота который крутит бутылку
                 if ("current" in result.bottle) {
                     current = result.bottle.current;
-                    chat_field.innerHTML += '<li>Крутит бутылку ' + current + '</li>';
+                    chat_field.innerHTML += '<li> Крутит бутылку ' + current + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
 

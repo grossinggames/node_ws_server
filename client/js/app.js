@@ -83,7 +83,13 @@ VK.init(function() {
                         // Добавить переход хода
                         bottle.style.transform = 'rotate(0deg)';
                     }
-                    chat_field.innerHTML += '<li>Целуются ' + partners[0] + ' и ' + partners[1] + ' </li>';
+                    chat_field.innerHTML += '<li>Анимация кручения ' + partners[0] + ' и ' + partners[1] + ' </li>';
+                    chat_field.scrollTop =  chat_field.scrollHeight;
+                }
+
+                // Устанавливаем значение слота который крутит бутылку
+                if ("start_kissing" in result.bottle) {
+                    chat_field.innerHTML += '<li> Начать анимацию приближения ' + partners[0] + ' и ' + partners[1] + '</li>';
                     chat_field.scrollTop =  chat_field.scrollHeight;
                 }
             }
@@ -284,7 +290,7 @@ VK.init(function() {
     // Бутылка
     var bottle = document.getElementById('bottle');
 
-    // Поменять состояние звука
+    // Клик по бутылке
     bottle.onclick = function () {
         socket.send( JSON.stringify({bottle: '1'}) );
     };

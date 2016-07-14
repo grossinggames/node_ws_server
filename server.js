@@ -277,6 +277,8 @@ function changeCurrent(idGroup) {
 
 // Имитация клика по бутылке
 function clickBottle(idGroup) {
+    clearTimeout(availibleGroups[idGroup].timer);
+
     // Избавиться от partner1 partner2 когда удалится availibleGroups
     var partner1;
     var partner2;
@@ -296,17 +298,29 @@ function clickBottle(idGroup) {
             partner1 = groups[idGroup].partners[0];
         }
     }
-
+    
     // Отправка тех кто будет целоваться
     sendMessageGroup(idGroup, { bottle: {partners: [partner1, partner2]} });
 
-    clearTimeout(availibleGroups[idGroup].timer);
-    // Передача хода по таймауту
-    availibleGroups[idGroup].timer = setTimeout( 
-        function() {
+    availibleGroups[idGroup].timer = setTimeout(function() {
+        startKissing(idGroup, partner1, partner2);
+    }, 5000);
+}
+
+// Анимация приближения партнеров
+function startKissing(idGroup, partner1, partner2) {
+    if (availibleGroups[idGroup].slots[partner1] && availibleGroups[idGroup].slots[partner2]) {
+        // Запуск анимации поцелуя
+        // Отправка тех кто будет целоваться
+        sendMessageGroup(idGroup, { bottle: {start_kissing: [partner1, partner2]} });
+        
+        // Передача хода по таймауту
+        availibleGroups[idGroup].timer = setTimeout(function() {
             changeCurrent(idGroup);
-        }, 5000
-    );
+        }, 5000);
+    } else {
+        changeCurrent(idGroup);
+    }
 }
 
 
